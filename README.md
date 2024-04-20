@@ -1,2 +1,2 @@
-# linghub.github.io
-LingHub
+# 靈枢
+网站枢纽页(建设中)
