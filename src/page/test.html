@@ -4,12 +4,56 @@
 <head>
     <meta charset="UTF-8">
     <title>点击按钮 动态创建列表，鼠标放上高亮显示</title>
+    <style>
+        #bg-div {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index:-2;
+        }
+        /* .bg-cvs{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index:-2;
+        } */
+
+        
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #79e6ed;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+    </style>
 </head>
 
 <body>
-    <canvas id="cvs" width="800" height="600"></canvas>
+    <div id='bg-div'>
+        <canvas class="bg-cvs" id="cvs"></canvas>
+    </div>
+    
+    <button onclick="toBilibili()">bilibi主页</button>
+    
 </body>
 <script>
+    parts = []
+    // var canvas = document.getElementById('cvs')
+    // canvas.setAttribute('width', window.innerWidth)
+    // canvas.setAttribute('width', window.innerHeight)
+    let video = document.getElementById("bg-div");
+    let canvas = document.getElementById("cvs");
+    canvas.width = video.offsetWidth;
+    canvas.height = video.offsetHeight;
+
+    // canvas.clientWidth = document.getElementById('bg-div').clientWidth
+    // canvas.clientHeight = document.getElementById('bg-div').clientHeight
     // 粒子类
     class Particle {
         constructor(x, y) {
@@ -17,10 +61,11 @@
             this.y = y; // 坐标y值
             this.speedRate = 0.4; // 速率，用来控制粒子流动的快慢
             this.speedX = 0; // 速度在x方向上的增量
-            this.speedY = 0; // 速度在y方向上的增量
+            this.speedY = -5; // 速度在y方向上的增量
             this.lifetime = 1 + Math.random() * 800; // 粒子生命周期，每次更新都会减小
             this.nextX = x + this.speedX; // 接下来粒子的x坐标
             this.nextY = y + this.speedY; // 接下来粒子的y坐标
+            this.t = 0;//绘制次数
         }
 
         // 更新粒子的方法
@@ -32,12 +77,47 @@
             this.nextX = this.x + this.speedX; // 计算接下来粒子的x坐标
             this.nextY = this.y + this.speedY; // 计算接下来粒子的y坐标
             this.lifetime--; // 生命周期减1
+            if (this.lifetime<0){
+                parts.forEach((Particle, i) => {
+                    if (Particle === this) {
+                        parts.splice(i, 1)
+                    }
+                })
+            }
+        }
+        draw(ctx){
+            let { x, y, t } = this
+            if (t < 5) {
+                this.t += 1
+                // return
+                
+            }else{
+                if (Math.random()*2>1){
+                this.test = '1'
+                }else{
+                    this.test = '0'
+                }
+                this.t = 0
+            }
+            ctx.beginPath()
+            var grad = ctx.createRadialGradient(x, y, 1, x, y, 18)
+            grad.addColorStop(0, "rgb(255,200,255)")
+            grad.addColorStop(1, "rgb(1,1,1)")
+            ctx.fillStyle = grad
+
+            ctx.arc(x, y, this.r, 0, 2 * Math.PI)
+            // ctx.fill()
+            ctx.fillText(this.test, x, y);
+            ctx.closePath()
         }
     }
+
+
 </script>
 <script>
     let stars = []
     let ctx = document.querySelector('#cvs').getContext('2d')
+    let canvas2 = document.getElementById("cvs").getBoundingClientRect()//获取画板矩形
 
     class Star {
         constructor(x, y, vx, vy, r = 4) {
@@ -79,12 +159,10 @@
                 }
                 this.t = 0
             }
-            
-            
-            
+
             ctx.beginPath()
             var grad = ctx.createRadialGradient(x, y, 1, x, y, 18)
-            grad.addColorStop(0, "rgb(193,255,255)")
+            grad.addColorStop(0, "rgb(255,200,255)")
             grad.addColorStop(1, "rgb(1,1,1)")
             ctx.fillStyle = grad
 
@@ -106,8 +184,9 @@
     }
     function draw() {
         // 这里在不断加半透明蒙层，使上一帧的流星变淡
+        
         ctx.fillStyle = 'rgba(0,0,0,0.5)'
-        ctx.rect(0, 0, 800, 600)
+        ctx.fillRect(0, 0, canvas2.width, canvas2.height)
         ctx.fill()
         for (let star of stars) {
             star.draw()
@@ -124,7 +203,7 @@
     }
     function main() {
         // ctx.fillRect(0, 0, 800, 600)
-        ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
+        ctx.fillRect(0, 0, canvas2.width, canvas2.width)
         initStars()
         draw()
     }
