@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>靈凛快递柜</title>
+    <link rel="icon" href="../image/fcb-icon.png" type="image/x-png">
     <style>
         * {
             margin: 0;
@@ -20,19 +21,29 @@
             width: 100%;
             height: 100%;
         }
-        
     </style>
-
 
 </head>
 
 <body>
-    
-    <div class="container">
-        <iframe src="http://106.52.234.27:12345/" width="100%" height="100%" marginwidth=0 marginheight=0 frameBorder=0>
-            <p>您的浏览器不支持 iframe 标签。</p>
-        </iframe>
-    </div>
+
+    <div class="container" id="box"></div>
+    <script>
+        // 笨蛋笨蛋笨
+        // 不准看源码
+        var url = 'http://106.52.234.27:12345/'
+        var iframe = document.createElement('iframe');
+        iframe.setAttribute('src', url)
+        iframe.setAttribute('width', '100%')
+        iframe.setAttribute('height', "100%")
+        iframe.setAttribute('marginwidth', '0')
+        iframe.setAttribute('marginheight', '0')
+        iframe.setAttribute('frameBorder', '0')
+        iframe.innerText = '不准看源码'
+        var box = document.getElementById('box')
+        box.appendChild(iframe);
+    </script>
+
 
 </body>
 
