@@ -9,5 +9,127 @@
 <body>
     <canvas id="cvs" width="800" height="600"></canvas>
 </body>
+<script>
+    // 粒子类
+    class Particle {
+        constructor(x, y) {
+            this.x = x; // 坐标x值
+            this.y = y; // 坐标y值
+            this.speedRate = 0.4; // 速率，用来控制粒子流动的快慢
+            this.speedX = 0; // 速度在x方向上的增量
+            this.speedY = 0; // 速度在y方向上的增量
+            this.lifetime = 1 + Math.random() * 800; // 粒子生命周期，每次更新都会减小
+            this.nextX = x + this.speedX; // 接下来粒子的x坐标
+            this.nextY = y + this.speedY; // 接下来粒子的y坐标
+        }
+
+        // 更新粒子的方法
+        update() {
+            this.x = this.nextX; // 更新x坐标
+            this.y = this.nextY; // 更新y坐标
+            this.speedX += (Math.random() * 2 - 1) * this.speedRate; // x方向增量
+            this.speedY += (Math.random() * 2 - 1) * this.speedRate; // y方向增量
+            this.nextX = this.x + this.speedX; // 计算接下来粒子的x坐标
+            this.nextY = this.y + this.speedY; // 计算接下来粒子的y坐标
+            this.lifetime--; // 生命周期减1
+        }
+    }
+</script>
+<script>
+    let stars = []
+    let ctx = document.querySelector('#cvs').getContext('2d')
+
+    class Star {
+        constructor(x, y, vx, vy, r = 4) {
+            this.x = x || rand(-100, 600)
+            this.y = y || -20 * Math.random()
+            this.a = 0.01
+            this.vx = vx || 2 * Math.random()
+            this.vy = vy || 3 * Math.random()
+            this.r = r
+            this.t = 10
+        }
+        move() {
+            this.vy += this.a
+            this.x += this.vx
+            this.r *= 0.992
+            this.y += this.vy
+            if (this.x < 0) this.x = 900
+            if (this.y > 600) {
+                stars.forEach((star, i) => {
+                    if (star === this) {
+                        stars.splice(i, 1)
+                        stars.push(new Star())
+                    }
+                })
+            }
+        }
+        draw() {
+            let { x, y, t } = this
+            
+            if (t < 5) {
+                this.t += 1
+                // return
+                
+            }else{
+                if (Math.random()*2>1){
+                this.test = '1'
+                }else{
+                    this.test = '0'
+                }
+                this.t = 0
+            }
+            
+            
+            
+            ctx.beginPath()
+            var grad = ctx.createRadialGradient(x, y, 1, x, y, 18)
+            grad.addColorStop(0, "rgb(193,255,255)")
+            grad.addColorStop(1, "rgb(1,1,1)")
+            ctx.fillStyle = grad
+
+            ctx.arc(x, y, this.r, 0, 2 * Math.PI)
+            // ctx.fill()
+            ctx.fillText(this.test, x, y);
+            ctx.closePath()
+
+        }
+    }
+    function initStars() {
+        for (let i = 0; i < 50; i++) {
+
+            stars.push(new Star(Math.floor(rand(0, 800)), Math.floor(rand(0, 100)), rand(-3, 3), rand(1, 2)))
+        }
+    }
+    function rand(min, max) {
+        return min + Math.random() * (max - min)
+    }
+    function draw() {
+        // 这里在不断加半透明蒙层，使上一帧的流星变淡
+        ctx.fillStyle = 'rgba(0,0,0,0.5)'
+        ctx.rect(0, 0, 800, 600)
+        ctx.fill()
+        for (let star of stars) {
+            star.draw()
+            star.move()
+        }
+        
+        // ctx.globalCompositeOperation = 'destination-in'; // 设置模式为：目标图形和源图形重叠的部分会被保留（源图形），其余显示为透明
+        // ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight); // 绘制矩形
+        // ctx.globalCompositeOperation = 'lighter'; // 设置模式为: 源图像 + 目标图像。重叠部分的颜色会重新计算
+        // ctx.globalAlpha = 0.8; // 设置画布上绘制图形的不透明度
+        
+        
+        requestAnimationFrame(draw)//更新回调
+    }
+    function main() {
+        // ctx.fillRect(0, 0, 800, 600)
+        ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
+        initStars()
+        draw()
+    }
+
+    main()
+</script>
 
 </html>
