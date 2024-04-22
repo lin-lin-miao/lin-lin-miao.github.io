@@ -10,9 +10,9 @@
     <style>
         .jump-button button {
             position: relative;
-            width: 200px;
+            width: 18vw;
             /*设置按钮宽度*/
-            height: 30px;
+            height: 6vw;
             /*设置按钮高度*/
             color: white;
             /*字体颜色*/
@@ -74,9 +74,9 @@
             background-color: rgba(50, 230, 175, 0.75);
             border-radius: 10px;
             /*让按钮变得圆滑一点*/
-            border-style: ridge;
-            border-width: 2px;
-            border-color: rgba(33, 159, 121, 0.75);
+            border-style: solid;
+            border-width: 5px;
+            border-color: rgba(35, 212, 159, 0.75);
             bottom: -160px;
             -webkit-animation: square 35s infinite;
             -webkit-animation-fill-mode: both;
@@ -95,7 +95,7 @@
             animation-play-state: paused;
             background-color: #ff8fffee;
             border-color: rgba(126, 33, 159, 0.75);
-            box-shadow: 0 8px 16px 0 rgba(48, 55, 66, 0.15);
+            box-shadow: 0 8px 16px 0 #ff8fff5e;
             /* 鼠标悬浮时盒子出现的阴影 */
             opacity: 0.8;
         }
@@ -162,8 +162,8 @@
 
         .bg-bubbles li:nth-child(9) {
             left: 25%;
-            width: 15px;
-            height: 15px;
+            width: 30px;
+            height: 30px;
             -webkit-animation-delay: 2s;
             animation-delay: 2s;
             -webkit-animation-duration: 40s;
@@ -250,6 +250,7 @@
     <div>
         <ul>
             <li>建设计划</li>
+            <li><input type="radio">自适应大小</li>
             <li><input type="radio">标题图标</li>
             <li><input type="radio">标题美化</li>
             <li><input type="radio">拖尾美化</li>
