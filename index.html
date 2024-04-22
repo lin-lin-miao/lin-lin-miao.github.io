@@ -8,11 +8,25 @@
 
 
     <style>
+        .jump-button {
+            width: 100%;
+            height: auto;
+            display: inline-block;
+        }
+
+        .jump-button div {
+            width: auto;
+            height: auto;
+            display: inline-block;
+        }
+
         .jump-button button {
-            position: relative;
-            width: 18vw;
+            /* position: relative; */
+            width: 300px;
+            min-width: 300px;
             /*设置按钮宽度*/
-            height: 6vw;
+            height: 80px;
+            min-height: 80px;
             /*设置按钮高度*/
             color: white;
             /*字体颜色*/
@@ -23,7 +37,7 @@
             border-width: 0;
             /*消去按钮丑的边框*/
             margin: 0;
-            outline: none;
+            /* outline: none; */
             /*取消轮廓*/
             font-family: KaiTi;
             /*字体设置为楷体*/
@@ -234,16 +248,11 @@
     </div>
 
     <div class="jump-button" align="center">
-        <table align="center">
-            <tbody>
-                <tr>
-                    <td><button onclick="toBilibili()">bilibi主页</button></td>
-                    <td><button onclick="toFCB()">文件快递柜</button></td>
-                    <td><button onclick="toHST()">HST</button></td>
-                    <td><button onclick="toTest()">测试页</button></td>
-                </tr>
-            </tbody>
-        </table>
+        <div><button onclick="toBilibili()">bilibi主页</button></div>
+        <div><button onclick="toFCB()">文件快递柜</button></div>
+        <div><button onclick="toHST()">HST</button></div>
+        <div><button onclick="toTest()">测试页</button></div>
+
     </div>
     <p></p>
 
