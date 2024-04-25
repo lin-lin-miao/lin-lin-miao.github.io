@@ -41,7 +41,7 @@
             /*取消轮廓*/
             font-family: KaiTi;
             /*字体设置为楷体*/
-            font-size: 17px;
+            font-size: 1rem;
             /*设置字体大小*/
             text-align: center;
             /*字体居中*/
@@ -60,11 +60,17 @@
             transform: scale(1.2) translate(0, -5px);
         }
 
+        /* html,
+        body {
+            width: 100%;
+            height: 100%;
+        } */
+
         body {
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: #79e6ed;
+            background: #1c1129;
             color: #fff;
             font-family: Arial, sans-serif;
         }
@@ -76,6 +82,15 @@
             width: 100%;
             height: 100%;
             z-index: -1;
+        }
+
+        #bg-cvs-div {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
         }
 
         .bg-bubbles li {
@@ -91,6 +106,7 @@
             border-style: solid;
             border-width: 5px;
             border-color: rgba(35, 212, 159, 0.75);
+            box-shadow: 0 0 0.5rem 0 #32e6af5e;
             bottom: -160px;
             -webkit-animation: square 35s infinite;
             -webkit-animation-fill-mode: both;
@@ -109,7 +125,7 @@
             animation-play-state: paused;
             background-color: #ff8fffee;
             border-color: rgba(126, 33, 159, 0.75);
-            box-shadow: 0 8px 16px 0 #ff8fff5e;
+            box-shadow: 0 0 1.2rem 0 #ff8fff5e;
             /* 鼠标悬浮时盒子出现的阴影 */
             opacity: 0.8;
         }
@@ -129,7 +145,7 @@
         }
 
         .bg-bubbles li:nth-child(3) {
-            left: 25%;
+            left: 60%;
             -webkit-animation-delay: 4s;
             animation-delay: 4s;
         }
@@ -213,6 +229,7 @@
                 top: -10%;
                 opacity: 0;
                 border-color: rgba(33, 159, 121, 0);
+                box-shadow: 0 0 0.1rem 0 #32e6b000;
             }
         }
 
@@ -248,10 +265,12 @@
     </div>
 
     <div class="jump-button" align="center">
-        <div><button onclick="toBilibili()">bilibi主页</button></div>
-        <div><button onclick="toFCB()">文件快递柜</button></div>
-        <div><button onclick="toHST()">HST</button></div>
-        <div><button onclick="toTest()">测试页</button></div>
+        <div align="left">
+            <div><button onclick="toBilibili()">bilibi主页</button></div>
+            <div><button onclick="toFCB()">文件快递柜</button></div>
+            <div><button onclick="toHST()">HST</button></div>
+            <div><button onclick="toTest()">测试页</button></div>
+        </div>
 
     </div>
     <p></p>
@@ -262,13 +281,13 @@
             <li><input type="radio">自适应大小</li>
             <li><input type="radio">标题图标</li>
             <li><input type="radio">标题美化</li>
-            <li><input type="radio">拖尾美化</li>
+            <li><input type="radio" checked>拖尾美化</li>
             <li><input type="radio" checked>其它</li>
             <li><input type="radio">更多</li>
         </ul>
     </div>
 
-    <div>
+    <div id="bg-b-div">
         <ul class="bg-bubbles">
             <li id="bg-li"></li>
             <li id="bg-li"></li>
@@ -283,6 +302,9 @@
         </ul>
     </div>
 
+    <div id='bg-cvs-div'>
+        <canvas class="bg-cvs" id="cvs"></canvas>
+    </div>
 
 </body>
 
@@ -301,49 +323,159 @@
     }
 </script>
 <script>
-    //使 DIV 元素拖动：
-    dragElement(document.getElementsByClassName("bg-bubbles"));
+    parts = [] //粒子列表
+    lis = [] //浮动方形列表
+    let canvas = document.getElementById("cvs"); //画板
+    let video = document.getElementById("bg-cvs-div");//父容器
+    var drawT = 100
+    let ctx = canvas.getContext('2d')
+    let canvas2
+    var on_mousedown = false
+    var mdx = 0;  // 按下鼠标指针的x轴坐标
+    var mdy = 0;  // 按下鼠标指针的y轴坐标
+    function redraw() {
+        if (drawT > 60) {
+            canvas.width = video.offsetWidth;
+            canvas.height = video.offsetHeight;;//填满屏幕
+            canvas2 = canvas.getBoundingClientRect()//获取画板矩形
+            drawT = 0
+        }
+        drawT += 1
+        // 填充画布
+        ctx.fillStyle = 'rgba(28,17,41,1)'
+        ctx.fillRect(0, 0, canvas2.width, canvas2.height)
+        ctx.fill()
 
-    function dragElement(elmnt) {
-        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-        if (document.getElementById(elmnt.id + "header")) {
-            /* 如果存在，header 就是你移动 DIV 的地方：*/
-            document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-        } else {
-            /* 否则，将 DIV 从 DIV 内的任何位置移动：*/
-            elmnt.onmousedown = dragMouseDown;
+        if (drawT % 30 === 1) {
+            wh = window.innerHeight
+            if (on_mousedown) {
+                parts.push(new Particle(mdx, mdy))
+            }
+            // wh = window.innerHeight*0.35
+            for (let li of lis) {
+                if (Math.random() * 2 > 1.2) {
+                    h = li.offsetHeight
+                    y = li.offsetTop + h * 1.4
+                    // console.log("wh:"+wh+"y:"+y);
+                    // if (y > wh){
+                    x = li.offsetLeft + (li.offsetWidth / 2)
+                    var p = new Particle(x, y)
+                    p.speedY = 0.1
+                    p.speedRate = 0.1
+                    p.lifetime = 1 + Math.random() * 180
+                    p.op = li.offsetTop * 2 / wh
+                    parts.push(p)
+                    // }
+                }
+
+            }
         }
 
-        function dragMouseDown(e) {
-            e = e || window.event;
-            e.preventDefault();
-            // 在启动时获取鼠标光标位置：
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            // 当光标移动时调用一个函数：
-            document.onmousemove = elementDrag;
+
+        for (let part of parts) {
+            part.draw(ctx)
+            part.update()
         }
 
-        function elementDrag(e) {
-            e = e || window.event;
-            e.preventDefault();
-            // 计算新的光标位置：
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            // 设置元素的新位置：
-            elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-            elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+
+        // parts.push(new Particle(100, 200))//粒子发生器
+        requestAnimationFrame(redraw)//更新回调
+    }
+    function mouseC() {
+        document.onmousemove = function (event) {  // 按下鼠标时，初始化处理
+            // event = e(event); 
+            mx = event.clientX;  // 按下鼠标指针的x轴坐标
+            my = event.clientY;  // 按下鼠标指针的y轴坐标
+            parts.push(new Particle(mx, my))
+        }
+        // document.mousedown = function (event) {  // 按下鼠标时，初始化处理
+        //     // event = e(event); 
+        //     mdx = event.clientX;  // 按下鼠标指针的x轴坐标
+        //     mdy = event.clientY;  // 按下鼠标指针的y轴坐标
+        //     on_mousedown = true
+        //     document.mouseup = mouseup
+        // }
+    }
+    
+    function main() {
+        let canvas2 = canvas.getBoundingClientRect()//获取画板矩形
+        // ctx.fillRect(0, 0, 800, 600)
+        ctx.fillRect(0, 0, canvas2.width, canvas2.height)
+
+        // initStars()
+        // parts.push(new Particle(50, 50))
+        mouseC()
+        redraw()
+    }
+    function elementBinding() {//元素绑定
+        var box = document.getElementById('bg-b-div')
+        var li = box.getElementsByTagName('li');
+        lis = li
+    }
+    // 粒子类
+    class Particle {
+        constructor(x, y) {
+            this.x = x; // 坐标x值
+            this.y = y; // 坐标y值
+            this.speedRate = 0.2; // 速率，用来控制粒子流动的快慢
+            this.speedX = 0; // 速度在x方向上的增量
+            this.speedY = -1; // 速度在y方向上的增量
+            this.lifetime = 1 + Math.random() * 60; // 粒子生命周期，每次更新都会减小
+            this.nextX = x + this.speedX; // 接下来粒子的x坐标
+            this.nextY = y + this.speedY; // 接下来粒子的y坐标
+            this.t = 0;//绘制次数
+            this.test = '0'
+            this.op = 1 //透明度
+            this.font = "1.2rem serif"
         }
 
-        function closeDragElement() {
-            /* 释放鼠标按钮时停止移动：*/
-            document.onmouseup = null;
-            document.onmousemove = null;
+        // 更新粒子的方法
+        update() {
+            this.x = this.nextX; // 更新x坐标
+            this.y = this.nextY; // 更新y坐标
+            this.speedX += (Math.random() * 2 - 1) * this.speedRate; // x方向增量
+            this.speedY += (Math.random() * 2 - 1) * this.speedRate; // y方向增量
+            this.nextX = this.x + this.speedX; // 计算接下来粒子的x坐标
+            this.nextY = this.y + this.speedY; // 计算接下来粒子的y坐标
+            this.lifetime--; // 生命周期减1
+            if (this.lifetime < 0) {
+                parts.forEach((Particle, i) => {
+                    if (Particle === this) {
+                        parts.splice(i, 1)
+                    }
+                })
+            }
+        }
+        draw(ctx) {
+            let { x, y, t } = this
+            if (t < 5) {
+                this.t += 1
+                // return
+
+            } else {
+                if (Math.random() * 2 < 0.75) {
+                    this.test = '1'
+                } else {
+                    this.test = '0'
+                }
+                this.t = 0
+            }
+            ctx.beginPath()
+            var grad = ctx.createRadialGradient(x, y, 1, x, y, 18)
+            // grad.addColorStop(0, "rgb(255,200,255)")
+            // grad.addColorStop(1, "rgb(243,184,243)")
+            // ctx.fillStyle = grad
+            ctx.fillStyle = "rgba(255,200,255," + this.op + ")"
+            ctx.font = this.font;
+            // ctx.arc(x, y, this.r, 0, 2 * Math.PI)
+            // console.log("x:"+x+"y:"+y);
+            // ctx.fill()
+            ctx.fillText(this.test, x, y);
+            ctx.closePath()
         }
     }
+    main()
+    elementBinding()
 </script>
 
 </html>
