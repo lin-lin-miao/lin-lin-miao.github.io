@@ -5,6 +5,10 @@
     <meta charset="utf-8">
     <link rel="icon" href="./src/image/main-icon.png" type="image/x-png">
     <title>靈枢</title>
+    <meta name="Description" content="靈枢,网站枢纽喵" />
+    <meta name="Keywords" content="靈枢 靈凛 网站枢纽" />
+    <meta name="Author" contect="靈凛" />
+    <meta name="Robots" contect="noindex" />
 
 
     <style>
@@ -41,7 +45,7 @@
             /*取消轮廓*/
             font-family: KaiTi;
             /*字体设置为楷体*/
-            font-size: 1rem;
+            font-size: 1.5rem;
             /*设置字体大小*/
             text-align: center;
             /*字体居中*/
@@ -69,7 +73,7 @@
         body {
             margin: 0;
             padding: 0;
-            overflow: hidden;
+            overflow: auto;
             background: #1c1129;
             color: #fff;
             font-family: Arial, sans-serif;
@@ -305,7 +309,7 @@
     <div id='bg-cvs-div'>
         <canvas class="bg-cvs" id="cvs"></canvas>
     </div>
-
+    
 </body>
 
 <script>
@@ -324,48 +328,75 @@
 </script>
 <script>
     parts = [] //粒子列表
+    var parts_MAX = 150;
     lis = [] //浮动方形列表
+
     let canvas = document.getElementById("cvs"); //画板
     let video = document.getElementById("bg-cvs-div");//父容器
     var drawT = 100
     let ctx = canvas.getContext('2d')
-    let canvas2
-    var on_mousedown = false
-    var mdx = 0;  // 按下鼠标指针的x轴坐标
-    var mdy = 0;  // 按下鼠标指针的y轴坐标
+    let cFrame
+    // var on_mousedown = false
+    // var mdx = 0;  // 按下鼠标指针的x轴坐标
+    // var mdy = 0;  // 按下鼠标指针的y轴坐标
+    var fps = 0;
+    var fpsLastTime = 0;
+    var mouseLastTime = 0;
+    var ontitle = 0;//页面焦点状态
+    function put_parts(p) {
+        if (parts.length < parts_MAX) {
+            parts.push(p)
+        }
+
+    }
+    function fps_C() {
+        var now = performance.now();
+        fps++;
+        if (now - fpsLastTime > 1000) {
+            parts_MAX += parts_MAX > -10 && parts_MAX < 200 ? fps - 60 : 0 // 自动限制粒子数
+            console.log("FPS: " + fps + " parts.length: " + parts.length + "  parts_MAX: " + parts_MAX);
+            fps = 0;
+            fpsLastTime = performance.now();
+        }
+    }
     function redraw() {
+        requestAnimationFrame(redraw)//更新回调
+        if (ontitle != 0 && ontitle != 3) {
+            fpsLastTime = performance.now();
+            return
+        }
+        fps_C();
+
         if (drawT > 60) {
             canvas.width = video.offsetWidth;
             canvas.height = video.offsetHeight;;//填满屏幕
-            canvas2 = canvas.getBoundingClientRect()//获取画板矩形
+            cFrame = canvas.getBoundingClientRect()//获取画板矩形
             drawT = 0
         }
         drawT += 1
         // 填充画布
         ctx.fillStyle = 'rgba(28,17,41,1)'
-        ctx.fillRect(0, 0, canvas2.width, canvas2.height)
+        ctx.fillRect(0, 0, cFrame.width, cFrame.height)
         ctx.fill()
 
-        if (drawT % 30 === 1) {
+        if (drawT % 15 === 1) {
             wh = window.innerHeight
-            if (on_mousedown) {
-                parts.push(new Particle(mdx, mdy))
-            }
-            // wh = window.innerHeight*0.35
             for (let li of lis) {
                 if (Math.random() * 2 > 1.2) {
                     h = li.offsetHeight
                     y = li.offsetTop + h * 1.4
                     // console.log("wh:"+wh+"y:"+y);
-                    // if (y > wh){
                     x = li.offsetLeft + (li.offsetWidth / 2)
                     var p = new Particle(x, y)
                     p.speedY = 0.1
+                    p.speedX = (Math.random() - 0.5)
                     p.speedRate = 0.1
-                    p.lifetime = 1 + Math.random() * 180
-                    p.op = li.offsetTop * 2 / wh
-                    parts.push(p)
-                    // }
+                    p.size_f = 1 + Math.random()
+                    p.lifetime = parseInt(150 + Math.random() * 50)
+                    p.lifetime_c = p.lifetime
+                    p.op = li.offsetTop * 1.5 / wh
+                    // p.isDivergence = false
+                    put_parts(p)
                 }
 
             }
@@ -376,36 +407,31 @@
             part.draw(ctx)
             part.update()
         }
+        // put_parts(new Particle(300, 500))//粒子发生器
 
-
-        // parts.push(new Particle(100, 200))//粒子发生器
-        requestAnimationFrame(redraw)//更新回调
     }
     function mouseC() {
         document.onmousemove = function (event) {  // 按下鼠标时，初始化处理
-            // event = e(event); 
+
+            if (performance.now() - mouseLastTime < 25) {
+                return
+            }
+            if (ontitle != 0 && ontitle != 3) {
+                return
+            }
+            mouseLastTime = performance.now()
             mx = event.clientX;  // 按下鼠标指针的x轴坐标
             my = event.clientY;  // 按下鼠标指针的y轴坐标
-            parts.push(new Particle(mx, my))
+            put_parts(new Particle(mx, my))
         }
-        // document.mousedown = function (event) {  // 按下鼠标时，初始化处理
-        //     // event = e(event); 
-        //     mdx = event.clientX;  // 按下鼠标指针的x轴坐标
-        //     mdy = event.clientY;  // 按下鼠标指针的y轴坐标
-        //     on_mousedown = true
-        //     document.mouseup = mouseup
-        // }
     }
-    
-    function main() {
-        let canvas2 = canvas.getBoundingClientRect()//获取画板矩形
-        // ctx.fillRect(0, 0, 800, 600)
-        ctx.fillRect(0, 0, canvas2.width, canvas2.height)
 
-        // initStars()
-        // parts.push(new Particle(50, 50))
+    function main() {
+        cFrame = canvas.getBoundingClientRect()//获取画板矩形
+        ctx.fillRect(0, 0, cFrame.width, cFrame.height)
         mouseC()
         redraw()
+        elementBinding()
     }
     function elementBinding() {//元素绑定
         var box = document.getElementById('bg-b-div')
@@ -417,26 +443,46 @@
         constructor(x, y) {
             this.x = x; // 坐标x值
             this.y = y; // 坐标y值
-            this.speedRate = 0.2; // 速率，用来控制粒子流动的快慢
+            this.r = 0; // 旋转度
+            this.speedRate = 0.1; // 速率，用来控制粒子流动的快慢
+            this.rotateRate = 0.3; // 速率，用来控制粒子旋转的快慢
             this.speedX = 0; // 速度在x方向上的增量
             this.speedY = -1; // 速度在y方向上的增量
-            this.lifetime = 1 + Math.random() * 60; // 粒子生命周期，每次更新都会减小
+            this.speedR = 0; //旋转速度
+            this.lifetime = 80 + Math.random() * 60; // 粒子生命周期，每次更新都会减小
             this.nextX = x + this.speedX; // 接下来粒子的x坐标
             this.nextY = y + this.speedY; // 接下来粒子的y坐标
+            this.nextR = this.r + this.speedR; // 接下来粒子的旋转
+
             this.t = 0;//绘制次数
-            this.test = '0'
+            this.test = '0' //显示的字
             this.op = 1 //透明度
-            this.font = "1.2rem serif"
+            this.font = "rem serif"//文字格式
+            this.size_f = 1.5// 文字大小
+
+            this.lifetime_c = this.lifetime
+            this.isDivergence = true
         }
 
         // 更新粒子的方法
         update() {
             this.x = this.nextX; // 更新x坐标
             this.y = this.nextY; // 更新y坐标
-            this.speedX += (Math.random() * 2 - 1) * this.speedRate; // x方向增量
-            this.speedY += (Math.random() * 2 - 1) * this.speedRate; // y方向增量
+            this.r = this.nextR;// 更新旋转
+            if (this.isDivergence) {
+                this.speedX += (Math.random() * 2 - 1) * this.speedRate; // x方向增量
+                this.speedY += (Math.random() * 2 - 1) * this.speedRate; // y方向增量
+                this.speedR += (Math.random() * 2 - 1) * this.rotateRate;
+            } else {
+                this.speedX = this.speedX * (this.speedRate + Math.random() * 0.1); // x方向增量
+                this.speedY = this.speedY * (this.speedRate + Math.random() * 0.1); // y方向增量
+                this.speedR += (Math.random() * 2 - 1) * this.rotateRate;
+            }
+
             this.nextX = this.x + this.speedX; // 计算接下来粒子的x坐标
             this.nextY = this.y + this.speedY; // 计算接下来粒子的y坐标
+            this.nextR = this.r + this.speedR; // 计算接下来粒子的旋转
+
             this.lifetime--; // 生命周期减1
             if (this.lifetime < 0) {
                 parts.forEach((Particle, i) => {
@@ -447,35 +493,76 @@
             }
         }
         draw(ctx) {
-            let { x, y, t } = this
+            let { x, y, r, t } = this
             if (t < 5) {
                 this.t += 1
                 // return
 
             } else {
                 if (Math.random() * 2 < 0.75) {
-                    this.test = '1'
+                    if (ontitle != 0) {
+                        this.test = 'X'
+                    } else {
+                        this.test = '1'
+                    }
                 } else {
                     this.test = '0'
                 }
+
                 this.t = 0
             }
+            ctx.save()
             ctx.beginPath()
             var grad = ctx.createRadialGradient(x, y, 1, x, y, 18)
             // grad.addColorStop(0, "rgb(255,200,255)")
             // grad.addColorStop(1, "rgb(243,184,243)")
             // ctx.fillStyle = grad
             ctx.fillStyle = "rgba(255,200,255," + this.op + ")"
-            ctx.font = this.font;
+            ctx.font = "" + (this.size_f * (this.lifetime / this.lifetime_c)) + this.font;
+            // console.log("wh:"+this.lifetime_c/this.lifetime);
             // ctx.arc(x, y, this.r, 0, 2 * Math.PI)
-            // console.log("x:"+x+"y:"+y);
+            // console.log("x:"+this.font);
             // ctx.fill()
-            ctx.fillText(this.test, x, y);
+            ctx.translate(x, y);
+            ctx.rotate(r * Math.PI / 180); // 旋转r度
+            ctx.fillText(this.test, 0, 0);
+            ctx.restore();
             ctx.closePath()
         }
     }
+
     main()
-    elementBinding()
+
+
+    window.onfocus = function () {
+        function timeoutTxt() {
+            document.title = '靈枢';
+            fpsLastTime = performance.now();
+            ontitle = 0;
+        }
+        if (ontitle == 0) {
+            return
+        }
+        //焦点在当前窗口
+        document.title = '数据恢复中';
+        //功能函数
+        setTimeout(timeoutTxt, ontitle == 1 ? 2000 : 10000);
+        ontitle = 3
+    }
+
+    window.onblur = function () {
+        //焦点不在当前窗口
+        function timeoutTxt() {
+            if (ontitle == 1) {
+                ontitle = 2
+                document.title = '数据丢失 X(';
+            }
+        }
+        //功能函数
+        ontitle = 1
+        document.title = '阿,不要离开';
+        setTimeout(timeoutTxt, 3000);
+    }
 </script>
 
 </html>
