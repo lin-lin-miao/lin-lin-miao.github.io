@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <link rel="icon" href="./src/image/main-icon.png" type="image/x-png">
-    <title>靈枢</title>
+    <title>HST</title>
     <meta name="Description" content="靈枢,网站枢纽喵" />
     <meta name="Keywords" content="靈枢 靈凛 网站枢纽" />
     <meta name="Author" contect="靈凛" />
@@ -270,15 +270,14 @@
 
     <div class="jump-button" align="center">
         <div align="left">
-            <div><button onclick="toBilibili()">bilibi主页</button></div>
-            <div><button onclick="toFCB()">文件快递柜</button></div>
             <div><button onclick="toHST()">HST</button></div>
-            <div><button onclick="toTest()">测试页</button></div>
+            <div><button onclick="toSQJS()">神器计算器</button></div>
+            <div><button onclick="toSQJL()">神器记录</button></div>
         </div>
 
     </div>
     <p></p>
-
+<!-- 
     <div>
         <ul>
             <li>建设计划</li>
@@ -289,7 +288,7 @@
             <li><input type="radio" checked>其它</li>
             <li><input type="radio">更多</li>
         </ul>
-    </div>
+    </div> -->
 
     <div id="bg-b-div">
         <ul class="bg-bubbles">
@@ -313,18 +312,16 @@
 </body>
 
 <script>
-    function toFCB() {
-        window.location.href = ".\\src\\page\\toFCB.html";
+    function toSQJL() {
+        window.location.href = ".\\HST\\神器记录.html";
     }
-    function toBilibili(params) {
-        window.location.href = "https://space.bilibili.com/344889685";
+    function toSQJS(params) {
+        window.location.href = ".\\HST\\神器计算器.html";
     }
     function toHST(params) {
-        window.location.href = ".\\src\\page\\HST.html";
+        window.location.href = "https://github.com/lin-lin-miao/HST-More-Language";
     }
-    function toTest(params) {
-        window.location.href = ".\\src\\page\\HST.html";
-    }
+    
 </script>
 <script>
     parts = [] //粒子列表
