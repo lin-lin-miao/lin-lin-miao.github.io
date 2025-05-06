@@ -1,0 +1,36 @@
+﻿<local:MyCard Title="私人服务器整合包介绍" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
+    <StackPanel Margin="25,40,23,15">
+        <local:MyImage Height="50" HorizontalAlignment="Center" Source="pack://application:,,,/images/Blocks/CommandBlock.png" />
+        <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
+                    Text="本私人服务器整合包（版本：整合包版本号）是为了让玩家能够更轻松地加入我们的私人服务器而特别制作的。它集成了一系列适合服务器的插件和模组，提供了丰富的游戏体验。" />
+        <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
+                    Text="通过这个整合包，你可以直接连接到我们的私人服务器，无需额外的配置步骤。快来加入我们，一起在游戏中创造精彩吧！" />
+    </StackPanel>
+</local:MyCard>
+
+<local:MyCard Title="启动私人服务器整合包" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
+    <StackPanel Margin="25,40,23,15">
+        <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
+                    Text="点击以下按钮即可启动私人服务器整合包（版本：整合包版本号）并自动连接到服务器。" />
+        <local:MyButton Margin="0,4,0,10" Width="250" Height="35"
+                    Text="启动私人服务器整合包" EventType="启动游戏" EventData="整合包版本号|私人服务器IP地址" ToolTip="启动整合包并连接到私人服务器" />
+    </StackPanel>
+</local:MyCard>
+
+<local:MyCard Title="PCL 常用功能" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
+    <StackPanel Margin="25,40,23,15">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <local:MyButton Grid.Column="0" Margin="0,0,10,0" Height="35"
+                        Text="今日人品" EventType="今日人品" />
+            <local:MyButton Grid.Column="1" Margin="0,0,10,0" Height="35"
+                        Text="清理垃圾" EventType="清理垃圾" />
+            <local:MyButton Grid.Column="2" Margin="0,0,10,0" Height="35"
+                        Text="内存优化" EventType="内存优化" />
+        </Grid>
+    </StackPanel>
+</local:MyCard>
