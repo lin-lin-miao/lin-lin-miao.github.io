@@ -1,0 +1,129 @@
+﻿<!-- <local:MyHint Margin="0,0,0,15" IsWarn="False" Text="此主页由 靈凛 开发与维护。" /> -->
+
+
+<local:MyCard Margin="0,10,0,10" Title="靈凛服务器信息" CanSwap="True" IsSwaped="False">    <!--下面不是卡片，所以不用0,0,0,12-->
+    <StackPanel Margin="24,35,24,15">
+        <!-- 整合包名称 -->
+        <TextBlock HorizontalAlignment="Center" Margin="0,5,0,5" Foreground="{DynamicResource ColorBrush2}" FontSize="20" ToolTip="[推荐版本名]整合包全名" Text="[ATM9S]All The Mod 9 - To The Sky" />
+        <!-- 整合包图片 -->
+
+        <local:MyImage Height="150" HorizontalAlignment="Center" Source="https://i.mcmod.cn/modpack/cover/20240607/1717769956_7949_Cirr.jpg@480x300.jpg" />
+        <!-- 记得更新ini信息 -->
+        <TextBlock Margin="0,5,0,5" HorizontalAlignment="Center" FontSize="10" Foreground="{DynamicResource ColorBrush1}" Text="信息日期:2025-05-09" />
+
+        <!-- 分割线 -->
+        <Grid Margin="0,10,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Line X1="0" X2="100" Stroke="{DynamicResource ColorBrush3}" StrokeThickness="1.5" Stretch="Fill" Grid.Column="0" />
+            <TextBlock Text="启动游戏" FontSize="15" Foreground="{DynamicResource ColorBrush4}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
+            <Line X1="0" X2="100" Stroke="{DynamicResource ColorBrush3}" StrokeThickness="1.5" Stretch="Fill" Grid.Column="2" />
+        </Grid>
+
+        <!-- 启动部分 -->
+        <local:MyButton Margin="0,5,0,5" Width="250" Height="35" Text="版本名启动" EventType="启动游戏" EventData="ATM9S|mc_mod.linglinmiao.fun" ToolTip="启动[推荐版本名]并进入服务器" />
+        <local:MyButton Margin="0,5,0,5" Width="250" Height="35" Text="正常启动" EventType="启动游戏" EventData="\current|mc_mod.linglinmiao.fun" ToolTip="启动选中的版本并进入服务器" />
+
+        <!--因为“你知道吗”在启动游戏的时候会出现，所以我只在这里设置了回声洞-->
+        <TextBlock Margin="0,5,0,12" Name="caveText" TextWrapping="Wrap" HorizontalAlignment="Center" Foreground="{DynamicResource ColorBrush1}" Text="{cave}" ToolTip="回声洞"/>
+        <TextBlock Margin="10,5,0,5" Name="hintText" TextWrapping="Wrap" Foreground="{DynamicResource ColorBrush3}" Text="你知道吗：{hint}" />
+    </StackPanel>
+</local:MyCard>
+
+
+<local:MyCard Title="常用工具" Margin="0,8,0,8" CanSwap="True" IsSwaped="False">
+    <StackPanel Margin="25,40,23,15">
+        <local:MyListItem Margin="0,5,0,5" Logo="pack://application:,,,/images/Blocks/RedstoneLampOn.png" Title="MC百科" Info="MCMOD百科" EventType="打开网页" EventData="https://www.mcmod.cn/" Type="Clickable" />
+        <local:MyListItem Margin="0,5,0,5" Logo="pack://application:,,,/images/Blocks/Grass.png" Title="MCWiki" Info="MCWiki" EventType="打开网页" EventData="https://zh.minecraft.wiki/" Type="Clickable" />
+        <local:MyListItem Margin="0,5,0,5" Logo="pack://application:,,,/images/Blocks/CommandBlock.png" Title="区块查看器" Info="区块查看器" EventType="打开网页" EventData="https://www.chunkbase.com/apps/" Type="Clickable" />
+        <local:MyListItem Margin="0,5,0,5" Logo="pack://application:,,,/images/Blocks/Egg.png" Title="MC账户" Info="MC账户" EventType="打开网页" EventData="https://www.minecraft.net/zh-hans/msaprofile/mygames" Type="Clickable" />
+    </StackPanel>
+</local:MyCard>
+
+<local:MyCard Title="主页工具" Margin="0,8,0,8" CanSwap="True" IsSwaped="False">
+    <StackPanel Margin="25,40,23,15">
+        <local:MyListItem Margin="0,5,0,5" Logo="https://lh.linglinmiao.fun/src/image/main-icon.png" Title="靈枢" Info="靈凛的网站枢纽" EventType="打开网页" EventData="https://lh.linglinmiao.fun/" Type="Clickable" />
+        <local:MyListItem Margin="0,5,0,5" Logo="pack://application:,,,/images/Blocks/Grass.png" Title="刷新主页" Info="刷新PCL主页" EventType="刷新主页" Type="Clickable" />
+        <local:MyListItem Margin="0,5,0,5" Logo="pack://application:,,,/images/Blocks/RedstoneLampOn.png" Title="下载你知道吗" Info="下载靈凛牌你知道吗" EventType="下载文件" EventData="https://lh.linglinmiao.fun/src/page/mc/src/hints.txt|hints.txt|{path}PCL" Type="Clickable" />
+        <local:MyListItem Margin="0,5,0,5" Logo="pack://application:,,,/images/Blocks/RedstoneLampOff.png" Title="复原你知道吗" Info="恢复原本的你知道吗" EventType="下载文件" EventData="https://lh.linglinmiao.fun/src/page/mc/src/rest_hints.txt|hints.txt|{path}PCL" Type="Clickable" />
+        <local:MyListItem Margin="0,5,0,5" Logo="pack://application:,,,/images/Blocks/CommandBlock.png" Title="复制回声洞" Info="复制回声洞内容" EventType="复制文本" EventData="{Binding ElementName=caveText,Path=Text}" Type="Clickable" />
+        <local:MyListItem Margin="0,5,0,5" Logo="pack://application:,,,/images/Blocks/CommandBlock.png" Title="复制你知道吗" Info="复制你知道吗内容" EventType="复制文本" EventData="{Binding ElementName=hintText,Path=Text}" Type="Clickable" />
+    </StackPanel>
+</local:MyCard>
+
+<local:MyCard Title="拓展功能" Margin="0,8,0,8" CanSwap="True" IsSwaped="True">
+    <StackPanel Margin="25,40,23,15">
+        <local:MyListItem Margin="0,5,0,5" Logo="pack://application:,,,/images/Blocks/CommandBlock.png" Title="下载靈凛妙妙小工具" Info="下载一个linglin.bat文件在PCL文件夹中,下载后可以使用下面的拓展功能" EventType="下载文件" EventData="https://lh.linglinmiao.fun/src/page/mc/src/linglin.bat|linglin.bat|{path}PCL" Type="Clickable" />
+        <local:MyHint Margin="0,5,0,5" Text="使用前建议先检查一遍内容" />
+        <local:MyListItem Margin="0,5,0,5" Logo="pack://application:,,,/images/Blocks/CommandBlock.png" Title="检查内容" Info="若不清楚的功能不建议使用" EventType="执行命令" EventData="notepad.exe|{path}PCL\linglin.bat" Type="Clickable" />
+        <local:MyListItem Margin="0,5,0,5" Logo="pack://application:,,,/images/Blocks/CommandBlock.png" Title="开源地址" Info="在这检查内容是否一致" EventType="打开网页" EventData="https://github.com/lin-lin-miao/lin-lin-miao.github.io/blob/main/src/page/mc/src/linglin.bat" Type="Clickable" />
+
+        <Grid Margin="0,5,0,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <local:MyButton Grid.Column="0" Margin="0,0,10,0" Height="35" Text="Ping一下" EventType="执行命令" EventData="linglin.bat|ping mc_mod.linglinmiao.fun" ToolTip="Ping一下服务器"/>
+            <local:MyButton Grid.Column="1" Margin="0,0,10,0" Height="35" Text="找java" EventType="执行命令" EventData="linglin.bat|找java" />
+            <local:MyButton Grid.Column="2" Margin="0,0,10,0" Height="35" Text="刷新DNS" EventType="执行命令" EventData="linglin.bat|刷新DNS" />
+        </Grid>
+
+        <Grid Margin="0,5,0,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <local:MyButton Grid.Column="0" Margin="0,0,10,0" Height="35" Text="电脑使用情况" EventType="执行命令" EventData="linglin.bat|电脑使用情况" />
+            <local:MyButton Grid.Column="1" Margin="0,0,10,0" Height="35" Text="还在开发" EventType="执行命令" EventData="linglin.bat|还在开发" />
+            <local:MyButton Grid.Column="2" Margin="0,0,10,0" Height="35" Text="还在开发" EventType="执行命令" EventData="linglin.bat|还在开发" />
+        </Grid>
+    </StackPanel>
+</local:MyCard>
+
+<!-- 分割线 -->
+<Grid Margin="0,10,0,10">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="1*" />
+        <ColumnDefinition Width="80" />
+        <ColumnDefinition Width="1*" />
+    </Grid.ColumnDefinitions>
+    <Line X1="0" X2="100" Stroke="{DynamicResource ColorBrush3}" StrokeThickness="1.5" Stretch="Fill" Grid.Column="0" />
+    <TextBlock Text="PCL功能" FontSize="15" Foreground="{DynamicResource ColorBrush4}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
+    <Line X1="0" X2="100" Stroke="{DynamicResource ColorBrush3}" StrokeThickness="1.5" Stretch="Fill" Grid.Column="2" />
+</Grid>
+
+<local:MyCard Title="PCL功能" Margin="0,8,0,8" CanSwap="True" IsSwaped="False">
+    <StackPanel Margin="25,40,23,15">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <local:MyButton Grid.Column="0" Margin="0,0,10,0" Height="35" Text="今日人品" EventType="今日人品" />
+            <local:MyButton Grid.Column="1" Margin="0,0,10,0" Height="35" Text="清理垃圾" EventType="清理垃圾" />
+            <local:MyButton Grid.Column="2" Margin="0,0,10,0" Height="35" Text="内存优化" EventType="内存优化" />
+        </Grid>
+    </StackPanel>
+</local:MyCard>
+
+<!-- 来自简单主页 -->
+<local:MyCard Margin="0,8,0,8" Title="下载器" CanSwap="True" IsSwaped="True">
+    <StackPanel Margin="24,40,24,15">
+        <local:MyHint Margin="0,0,0,10" IsWarn="False" Text="使用 PCL 的高速多线程下载引擎下载任意文件。请注意，部分网站 (例如百度网盘) 可能会报错 (403) 已禁止，无法正常下载。" />
+        <local:MyHint Margin="0,0,0,10" IsWarn="True" Text="链接必须为以 http:// 或 https:// 开头的网址，部分网址可能无法下载" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <local:MyTextBox HintText="下载链接：" Margin="0,0,0,0" Name="web" Height="30" Grid.Column="0" ToolTip="在此输入下载链接，点击右边按钮下载自定义文件。&#xA;注意不要按下Enter键，这会直接启动游戏。" />
+            <local:MyButton EventType="下载文件" EventData="{Binding ElementName=web,Path=Text}" Text="开始下载→" Margin="5,0,0,0" Height="30" Grid.Column="2" Padding="2,0,2,0" ColorType="Highlight" />
+        </Grid>
+    </StackPanel>
+</local:MyCard>
