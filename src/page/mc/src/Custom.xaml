@@ -1,5 +1,5 @@
 ﻿<!-- <local:MyHint Margin="0,0,0,15" IsWarn="False" Text="此主页由 靈凛 开发与维护。" /> -->
-
+<!-- 咪 -->
 
 <local:MyCard Margin="0,10,0,10" Title="靈凛服务器信息" CanSwap="True" IsSwaped="False">    <!--下面不是卡片，所以不用0,0,0,12-->
     <StackPanel Margin="24,35,24,15">
