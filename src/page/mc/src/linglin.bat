@@ -1,4 +1,5 @@
 @echo off
+setlocal enabledelayedexpansion
 chcp 936 >nul
 
 
