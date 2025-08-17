@@ -4,12 +4,12 @@
 <local:MyCard Margin="0,10,0,10" Title="靈凛服务器信息" CanSwap="True" IsSwaped="False">    <!--下面不是卡片，所以不用0,0,0,12-->
     <StackPanel Margin="24,35,24,15">
         <!-- 整合包名称 -->
-        <TextBlock HorizontalAlignment="Center" Margin="0,5,0,5" Foreground="{DynamicResource ColorBrush2}" FontSize="20" ToolTip="[推荐版本名]整合包全名" Text="[CreateTheBrassConcerto]机械动力：黄铜协奏曲" />
+        <TextBlock HorizontalAlignment="Center" Margin="0,5,0,5" Foreground="{DynamicResource ColorBrush2}" FontSize="20" ToolTip="[推荐版本名]整合包全名" Text="[ATM10SKY]All the Mods 10: To the Sky ATM10SKY" />
         <!-- 整合包图片 -->
 
-        <local:MyImage Height="150" HorizontalAlignment="Center" Source="https://i.mcmod.cn/modpack/cover/20250408/1744125387_7949_OJpa.jpg@480x300.jpg" />
+        <local:MyImage Height="150" HorizontalAlignment="Center" Source="https://media.forgecdn.net/avatars/thumbnails/1389/739/64/64/638901033593272382.png" />
         <!-- 记得更新ini信息 -->
-        <TextBlock Margin="0,5,0,5" HorizontalAlignment="Center" FontSize="10" Foreground="{DynamicResource ColorBrush1}" Text="信息日期:2025-06-18" />
+        <TextBlock Margin="0,5,0,5" HorizontalAlignment="Center" FontSize="10" Foreground="{DynamicResource ColorBrush1}" Text="信息日期:2025-08-17" />
 
         <!-- 分割线 -->
         <Grid Margin="0,10,0,10">
@@ -24,7 +24,7 @@
         </Grid>
 
         <!-- 启动部分 -->
-        <local:MyButton Margin="0,5,0,5" Width="250" Height="35" Text="版本名启动" EventType="启动游戏" EventData="CreateTheBrassConcerto|mc_mod.linglinmiao.fun" ToolTip="启动[推荐版本名]并进入服务器" />
+        <local:MyButton Margin="0,5,0,5" Width="250" Height="35" Text="版本名启动" EventType="启动游戏" EventData="ATM10SKY|mc_mod.linglinmiao.fun" ToolTip="启动[推荐版本名]并进入服务器" />
         <local:MyButton Margin="0,5,0,5" Width="250" Height="35" Text="正常启动" EventType="启动游戏" EventData="\current|mc_mod.linglinmiao.fun" ToolTip="启动选中的版本并进入服务器" />
 
         <!--因为“你知道吗”在启动游戏的时候会出现，所以我只在这里设置了回声洞-->
