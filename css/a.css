@@ -1,0 +1,25 @@
+/* 取消默认下划线 */
+a {
+	text-decoration: none;
+	/* 核心属性：取消下划线 */
+	color: #333;
+	/* 可选：修改默认链接颜色（默认蓝色） */
+}
+
+/* 可选：处理hover/点击/已访问状态，避免交互时重新出现下划线 */
+a:hover {
+	text-decoration: none;
+	/* 鼠标悬浮时也无下划线 */
+	color: #ec72ff;
+	/* 悬浮时改颜色，提升交互体验 */
+}
+
+a:active {
+	text-decoration: none;
+	/* 点击时无下划线 */
+}
+
+a:visited {
+	text-decoration: none;
+	/* 已访问链接无下划线 */
+}

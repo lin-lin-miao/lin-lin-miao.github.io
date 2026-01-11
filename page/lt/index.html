@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="../../css/a.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>靈坛</title>
+</head>
+
+<body>
+	<div class="title_menu box_bg">
+		<div style="height: 100%;width:100%;display: flex;align-items: center;justify-content: center;">
+			<img style="height: 100%; width: auto; object-fit: contain;"
+				src="https://i0.hdslb.com/bfs/static/jinkela/long/images/favicon.ico">
+		</div>
+	</div>
+	<div class="title_menu_bottom"></div>
+	<div class="main_border ">
+		<div class="main_side_l"></div>
+		<div class="main_page box_bg">
+
+			<div class="list_box box_bg">
+				<img class="list_img" src="https://i0.hdslb.com/bfs/static/jinkela/long/images/favicon.ico">
+				<div class="list_r">
+					<a class="list_text" href="../../index.html?a=aaaaa&b=aaaaa">
+						<h2>如果出现这个</h2>
+						<h4>那就证明数据获取失败啦</h4>
+					</a>
+					<div class="list_bottom">
+						<div class="list_tag">#标签1 #标签2</div>
+						<div class="list_interact">
+							<img src="../../src/ico/like.svg" class="list_ico"></img>
+							<div>0</div>
+							<img src="../../src/ico/eye.svg" class="list_ico"></img>
+							<div>0</div>
+							<img src="../../src/ico/chat.svg" class="list_ico"></img>
+							<div>0</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="main_side_r box_bg">
+			<P>CCCCC</P>
+		</div>
+	</div>
+
+</body>
+<script src="../../script/bg-js.js"></script>
+<script>
+	window.bgState.setShowFPS(true)
+	const title_menu = document.querySelector('.title_menu')
+	const title_menu_bottom = document.querySelector('.title_menu_bottom')
+
+
+	function syncHeight() {
+		title_menu_bottom.style.height = (title_menu.offsetHeight + 16) + 'px';
+	}
+
+
+	window.addEventListener('resize', syncHeight);
+	if (document.readyState === 'complete' || document.readyState === 'interactive') {
+		syncHeight()
+	} else {
+		document.addEventListener('DOMContentLoaded', function () {
+			syncHeight()
+		});
+	}
+</script>
+
+<script>
+	const list_item_Content = '<img class="list_img" src="{{title_img}}">' +
+		'<div class="list_r">' +
+		'<a class="list_text" href="../../index.html?id={{id}}">' +
+		'<h2>{{title}}</h2>' +
+		'<h4>{{title_text}}</h4>' +
+		'</a>' +
+		'<div class="list_bottom">' +
+		'<div class="list_tag">{{tags}}</div>' +
+		'<div class="list_interact">' +
+		'<img src="../../src/ico/like.svg" class="list_ico"></img><div>{{like}}</div>' +
+		'<img src="../../src/ico/eye.svg" class="list_ico"></img><div>{{click}}</div>' +
+		'<img src="../../src/ico/chat.svg" class="list_ico"></img><div>{{chat}}</div>' +
+		'</div>' +
+		'</div>' +
+		'</div>'
+		;
+	const main_page_view = document.querySelector('.main_page');
+
+	//通过api回传的数据列表解析
+	var pageData = [{'id': '1111', 'title_img': '../../src/ico/like.svg', 'title': '这是文章标题', 'title_text': '这是副标题', 'tags': ['标签1', '标签'], 'like': 5, 'click': 5, 'chat': 5},
+{'id': '1111', 'title_img': '../../src/ico/like.svg', 'title': '这是文章标题', 'title_text': '这是副标题', 'tags': ['标签1', '标签'], 'like': 5, 'click': 5, 'chat': 5}];
+	
+	showPageList(main_page_view,pageData);
+
+
+	function get_list_item(data) {
+		var item = document.createElement('div');
+		let list_item_HTML = list_item_Content;
+
+		let tags = '#' + data['tags'].join(' #');
+		data['tags'] = tags;
+
+		for (let key in data) {
+			list_item_HTML = list_item_HTML.replace(new RegExp('{{' + key + '}}', 'g'), data[key])
+		}
+
+		item.className = 'list_box box_bg';
+		item.innerHTML = list_item_HTML;
+		return item
+	}
+
+	function showPageList(page, data_list) {
+		main_page_view.innerHTML = "";
+		for (let item of data_list){
+			page.appendChild(get_list_item(item))
+		}
+	}
+</script>
+
+</html>

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+
+
+
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			overflow: auto;
+			background: #1c1129;
+			color: #fff;
+			font-family: Arial, sans-serif;
+		}
+
+		.bg-bubbles {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: -1;
+		}
+
+		#bg-cvs-div {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: -2;
+		}
+
+		.bg-bubbles li {
+			position: fixed;
+			list-style: none;
+			display: block;
+			width: 40px;
+			height: 40px;
+			cursor: move;
+			background-color: rgba(50, 230, 175, 0.75);
+			border-radius: 10px;
+			/*让按钮变得圆滑一点*/
+			border-style: solid;
+			border-width: 5px;
+			border-color: rgba(35, 212, 159, 0.75);
+			box-shadow: 0 0 0.5rem 0 #32e6af5e;
+			bottom: -160px;
+			-webkit-animation: square 35s infinite;
+			-webkit-animation-fill-mode: both;
+			-webkit-animation-play-state: running;
+			animation: square 35s infinite;
+			animation-fill-mode: both;
+			animation-play-state: running;
+			transition-timing-function: linear;
+			transition: all 2s ease 0.5s;
+			z-index: 1;
+		}
+
+		.bg-bubbles li:hover {
+			/*鼠标移动时的颜色变化*/
+			-webkit-animation-play-state: paused;
+			animation-play-state: paused;
+			background-color: #ff8fffee;
+			border-color: rgba(126, 33, 159, 0.75);
+			box-shadow: 0 0 1.2rem 0 #ff8fff5e;
+			/* 鼠标悬浮时盒子出现的阴影 */
+			opacity: 0.8;
+		}
+
+		.bg-bubbles li:nth-child(1) {
+			left: 10%;
+		}
+
+		.bg-bubbles li:nth-child(2) {
+			left: 20%;
+			width: 80px;
+			height: 80px;
+			-webkit-animation-delay: 2s;
+			animation-delay: 2s;
+			-webkit-animation-duration: 17s;
+			animation-duration: 17s;
+		}
+
+		.bg-bubbles li:nth-child(3) {
+			left: 60%;
+			-webkit-animation-delay: 4s;
+			animation-delay: 4s;
+		}
+
+		.bg-bubbles li:nth-child(4) {
+			left: 40%;
+			width: 60px;
+			height: 60px;
+			-webkit-animation-duration: 22s;
+			animation-duration: 22s;
+			background-color: rgba(50, 230, 175, 0.25);
+		}
+
+		.bg-bubbles li:nth-child(5) {
+			left: 70%;
+		}
+
+		.bg-bubbles li:nth-child(6) {
+			left: 80%;
+			width: 120px;
+			height: 120px;
+			-webkit-animation-delay: 3s;
+			animation-delay: 3s;
+			background-color: rgba(50, 230, 175, 0.2);
+		}
+
+		.bg-bubbles li:nth-child(7) {
+			left: 32%;
+			width: 160px;
+			height: 160px;
+			-webkit-animation-delay: 7s;
+			animation-delay: 7s;
+		}
+
+		.bg-bubbles li:nth-child(8) {
+			left: 55%;
+			width: 20px;
+			height: 20px;
+			-webkit-animation-delay: 15s;
+			animation-delay: 15s;
+			-webkit-animation-duration: 40s;
+			animation-duration: 40s;
+		}
+
+		.bg-bubbles li:nth-child(9) {
+			left: 25%;
+			width: 30px;
+			height: 30px;
+			-webkit-animation-delay: 2s;
+			animation-delay: 2s;
+			-webkit-animation-duration: 40s;
+			animation-duration: 40s;
+			background-color: rgba(50, 230, 175, 0.3);
+		}
+
+		.bg-bubbles li:nth-child(10) {
+			left: 90%;
+			width: 160px;
+			height: 160px;
+			-webkit-animation-delay: 11s;
+			animation-delay: 11s;
+		}
+
+		@-webkit-keyframes square {
+			0% {
+				/* transform: translateY(0); */
+				top: 110%;
+				opacity: 0;
+			}
+
+			5% {
+				opacity: 1;
+			}
+
+			80% {
+				opacity: 0.2;
+			}
+
+			100% {
+				transform: rotate(600deg);
+				top: -10%;
+				opacity: 0;
+				border-color: rgba(33, 159, 121, 0);
+				box-shadow: 0 0 0.1rem 0 #32e6b000;
+			}
+		}
+
+		@keyframes square {
+			0% {
+				/* transform: translateY(0); */
+				top: 110%;
+				opacity: 0;
+			}
+
+			5% {
+				opacity: 1;
+			}
+
+			80% {
+				opacity: 0.2;
+			}
+
+			100% {
+				transform: rotate(600deg);
+				top: -10%;
+				opacity: 0;
+				border-color: rgba(33, 159, 121, 0);
+			}
+		}
+	</style>
+</head>
+
+
+<body>
+	<div id="bg-b-div">
+		<ul class="bg-bubbles">
+			<li id="bg-li"></li>
+			<li id="bg-li"></li>
+			<li id="bg-li"></li>
+			<li id="bg-li"></li>
+			<li id="bg-li"></li>
+			<li id="bg-li"></li>
+			<li id="bg-li"></li>
+			<li id="bg-li"></li>
+			<li id="bg-li"></li>
+			<li id="bg-li"></li>
+		</ul>
+	</div>
+
+	<div id='bg-cvs-div'>
+		<canvas class="bg-cvs" id="cvs"></canvas>
+	</div>
+</body>
+
+<script>
+	parts = [] //粒子列表
+	var parts_MAX = 350;
+	lis = [] //浮动方形列表
+
+	let canvas = document.getElementById("cvs"); //画板
+	let video = document.getElementById("bg-cvs-div");//父容器
+	var drawT = 100
+	let ctx = canvas.getContext('2d')
+	let cFrame
+	// var on_mousedown = false
+	// var mdx = 0;  // 按下鼠标指针的x轴坐标
+	// var mdy = 0;  // 按下鼠标指针的y轴坐标
+	var fps = 0;
+	var fpsLastTime = 0;
+
+	var mouseLastTime = 0; // 上一次移动鼠标创建粒子的时间戳
+	let lastMx = 0; // 上一次创建粒子的鼠标X坐标
+	let lastMy = 0; // 上一次创建粒子的鼠标Y坐标
+	const MOVE_DISTANCE_THRESHOLD = 25; // 触发粒子创建的最小移动距离（像素）
+	let isMouseDown = false; // 标记鼠标是否按下
+	let longPressTimer = null; // 长按定时器，用于持续创建粒子
+
+	var ontitle = 0;//页面焦点状态
+	function put_parts(p) {
+		if (parts.length < parts_MAX) {
+			parts.push(p)
+		}
+
+	}
+	function fps_C() {
+		var now = performance.now();
+		fps++;
+		if (now - fpsLastTime > 1000) {
+			parts_MAX += parts_MAX > -10 && parts_MAX < 500 ? fps - 60 : 0 // 自动限制粒子数
+			console.log("FPS: " + fps + " parts.length: " + parts.length + "  parts_MAX: " + parts_MAX);
+			fps = 0;
+			fpsLastTime = performance.now();
+		}
+	}
+	function redraw() {
+		requestAnimationFrame(redraw)//更新回调
+		if (ontitle != 0 && ontitle != 3) {
+			fpsLastTime = performance.now();
+			return
+		}
+		fps_C();
+
+		if (drawT > 60) {
+			canvas.width = video.offsetWidth;
+			canvas.height = video.offsetHeight;;//填满屏幕
+			cFrame = canvas.getBoundingClientRect()//获取画板矩形
+			drawT = 0
+		}
+		drawT += 1
+		// 填充画布
+		ctx.fillStyle = 'rgba(28,17,41,1)'
+		ctx.fillRect(0, 0, cFrame.width, cFrame.height)
+		ctx.fill()
+
+		if (drawT % 15 === 1) {
+			// 矩形粒子产生
+			wh = window.innerHeight
+			for (let li of lis) {
+				if (Math.random() * 2 > 1.2) {
+					h = li.offsetHeight
+					y = li.offsetTop + h * 1.4
+					// console.log("wh:"+wh+"y:"+y);
+					x = li.offsetLeft + (li.offsetWidth / 2)
+					var p = new Particle(x, y)
+					p.speedY = 0.1
+					p.speedX = (Math.random() - 0.5)
+					p.speedRate = 0.1
+					p.size_f = 1 + Math.random()
+					p.lifetime = parseInt(150 + Math.random() * 50)
+					p.lifetime_c = p.lifetime
+					p.op = li.offsetTop * 1.5 / wh
+					// p.isDivergence = false
+					put_parts(p)
+				}
+
+			}
+		}
+
+
+		for (let part of parts) {
+			part.draw(ctx)
+			part.update()
+		}
+		// put_parts(new Particle(300, 500))//粒子发生器
+
+	}
+	function mouseC() {
+		document.addEventListener('mousedown', function (event) {
+			// 仅保留业务状态限制（ontitle为0或3），其余限制全部忽略
+			if (ontitle != 0 && ontitle != 3) {
+				return;
+			}
+
+			// 标记鼠标按下状态
+			isMouseDown = true;
+
+			// 获取按下时的鼠标坐标
+			const currentMx = event.clientX;
+			const currentMy = event.clientY;
+			// 直接更新时间和坐标，创建粒子（无任何额外限制）
+			// mouseLastTime = performance.now();
+			mx = currentMx;
+			my = currentMy;
+			lastMx = mx;
+			lastMy = my;
+			put_parts(new Particle(mx, my));
+
+			// 第二步：启动长按定时器，每隔5毫秒创建一次粒子
+			// 先清除旧定时器（避免重复创建）
+			if (longPressTimer) clearInterval(longPressTimer);
+			longPressTimer = setInterval(() => {
+				// 仅在鼠标保持按下且状态合法时创建
+				if (!isMouseDown || (ontitle != 0 && ontitle != 3)) {
+					clearInterval(longPressTimer);
+					return;
+				}
+				// 长按期间实时获取鼠标坐标（支持按下后移动鼠标）
+				// const pressMx = event.clientX;
+				// const pressMy = event.clientY;
+				// mouseLastTime = performance.now();
+				mx = lastMx;
+				my = lastMy;
+				p = new Particle(mx - 7, my + 10)
+				p.speedX = (Math.random() - 0.5) * 8
+				p.speedY = (Math.random() - 0.5) * 8
+				p.speedRate = 0.93
+				p.size_f = 1.3 - Math.random() * 0.5
+				p.test = Math.random() > 0.98 ? "喵" : "0"
+				// p.lifetime -= 60
+				// p.lifetime_c = p.lifetime
+				p.isDivergence = false
+				put_parts(p);
+			}, 5); // 每隔5毫秒创建一次
+		});
+
+		// ========== 2. 鼠标松开事件 - 停止长按定时 ==========
+		document.addEventListener('mouseup', function () {
+			// 重置鼠标按下状态
+			isMouseDown = false;
+			// 清除定时器，停止持续创建粒子
+			if (longPressTimer) {
+				clearInterval(longPressTimer);
+				longPressTimer = null;
+			}
+		});
+
+		// ========== 3. 鼠标离开文档 - 兜底停止定时（防止异常） ==========
+		document.addEventListener('mouseleave', function () {
+			isMouseDown = false;
+			if (longPressTimer) {
+				clearInterval(longPressTimer);
+				longPressTimer = null;
+			}
+		});
+
+		document.addEventListener('mousemove', function (event) {  // 移动鼠标时，初始化处理
+
+			ti = performance.now() - mouseLastTime
+
+			if (ti < 25) {
+				return
+			}
+			if (ontitle != 0 && ontitle != 3) {
+				return
+			}
+			if (ti < 500) {
+				// 3. 新增：计算当前鼠标与上一次的距离
+				const currentMx = event.clientX;
+				const currentMy = event.clientY;
+				// 计算两点间的直线距离（欧几里得距离，简化写法）
+				const moveDistance = Math.hypot(currentMx - lastMx, currentMy - lastMy);
+
+				// 3.1 距离未达到阈值则返回（首次触发时lastMx/lastMy为0，直接放行）
+				if (moveDistance < MOVE_DISTANCE_THRESHOLD && (lastMx !== 0 || lastMy !== 0)) {
+					return;
+				}
+			}
+
+			mouseLastTime = performance.now()
+			mx = event.clientX;  // 按下鼠标指针的x轴坐标
+			my = event.clientY;  // 按下鼠标指针的y轴坐标
+			lastMx = mx; // 更新上一次鼠标坐标
+			lastMy = my; // 更新上一次鼠标坐标
+			put_parts(new Particle(mx - 7, my + 10))
+		});
+	}
+
+	function main() {
+		cFrame = canvas.getBoundingClientRect()//获取画板矩形
+		ctx.fillRect(0, 0, cFrame.width, cFrame.height)
+		mouseC() //鼠标事件绑定
+		redraw()
+		elementBinding()
+	}
+	function elementBinding() {//元素绑定
+		var box = document.getElementById('bg-b-div')
+		var li = box.getElementsByTagName('li');
+		lis = li
+	}
+	// 粒子类
+	class Particle {
+		constructor(x, y) {
+			this.x = x; // 坐标x值
+			this.y = y; // 坐标y值
+			this.r = 0; // 旋转度
+			this.speedRate = 0.1; // 速率，用来控制粒子流动的快慢
+			this.rotateRate = 0.3; // 速率，用来控制粒子旋转的快慢
+			this.speedX = 0; // 速度在x方向上的增量
+			this.speedY = -1; // 速度在y方向上的增量
+			this.speedR = 0; //旋转速度
+			this.lifetime = 80 + Math.random() * 60; // 粒子生命周期，每次更新都会减小
+			this.nextX = x + this.speedX; // 接下来粒子的x坐标
+			this.nextY = y + this.speedY; // 接下来粒子的y坐标
+			this.nextR = this.r + this.speedR; // 接下来粒子的旋转
+
+			this.t = 0;//绘制次数
+			this.test = '0' //显示的字
+			this.op = 1 //透明度
+			this.font = "rem serif"//文字格式
+			this.size_f = 1.5// 文字大小
+
+			this.lifetime_c = this.lifetime
+			this.isDivergence = true
+		}
+
+		// 更新粒子的方法
+		update() {
+			this.x = this.nextX; // 更新x坐标
+			this.y = this.nextY; // 更新y坐标
+			this.r = this.nextR;// 更新旋转
+			if (this.isDivergence) {
+				this.speedX += (Math.random() * 2 - 1) * this.speedRate; // x方向增量
+				this.speedY += (Math.random() * 2 - 1) * this.speedRate; // y方向增量
+				this.speedR += (Math.random() * 2 - 1) * this.rotateRate;
+			} else {
+				this.speedX = this.speedX * (this.speedRate + Math.random() * 0.1); // x方向增量
+				this.speedY = this.speedY * (this.speedRate + Math.random() * 0.1); // y方向增量
+				this.speedR += (Math.random() * 2 - 1) * this.rotateRate;
+			}
+
+			this.nextX = this.x + this.speedX; // 计算接下来粒子的x坐标
+			this.nextY = this.y + this.speedY; // 计算接下来粒子的y坐标
+			this.nextR = this.r + this.speedR; // 计算接下来粒子的旋转
+
+			this.lifetime--; // 生命周期减1
+			if (this.lifetime < 0) {
+				parts.forEach((Particle, i) => {
+					if (Particle === this) {
+						parts.splice(i, 1)
+					}
+				})
+			}
+		}
+		draw(ctx) {
+			let { x, y, r, t } = this
+			if (t < 5) {
+				this.t += 1
+				// return
+
+			} else {
+				if (this.test === '1' || this.test === "0" || this.test === "X") {
+					if (Math.random() * 2 < 0.75) {
+						if (ontitle != 0) {
+							this.test = 'X'
+						} else {
+							this.test = '1'
+						}
+					} else {
+						this.test = '0'
+					}
+				}
+
+
+				this.t = 0
+			}
+			ctx.save()
+			ctx.beginPath()
+			var grad = ctx.createRadialGradient(x, y, 1, x, y, 18)
+			// grad.addColorStop(0, "rgb(255,200,255)")
+			// grad.addColorStop(1, "rgb(243,184,243)")
+			// ctx.fillStyle = grad
+			ctx.fillStyle = "rgba(255,200,255," + this.op + ")"
+			ctx.font = "" + (this.size_f * (this.lifetime / this.lifetime_c)) + this.font;
+			// console.log("wh:"+this.lifetime_c/this.lifetime);
+			// ctx.arc(x, y, this.r, 0, 2 * Math.PI)
+			// console.log("x:"+this.font);
+			// ctx.fill()
+			ctx.translate(x, y);
+			ctx.rotate(r * Math.PI / 180); // 旋转r度
+			ctx.fillText(this.test, 0, 0);
+			ctx.restore();
+			ctx.closePath()
+		}
+	}
+
+
+	window.onload = function () {
+		main()
+	}
+	var title = document.title
+	window.onfocus = function () {
+		function timeoutTxt() {
+			document.title = title;
+			fpsLastTime = performance.now();
+			ontitle = 0;
+		}
+		if (ontitle == 0) {
+			return
+		}
+		//焦点在当前窗口
+		document.title = '数据恢复中';
+		//功能函数
+		setTimeout(timeoutTxt, ontitle == 1 ? 2000 : 10000);
+		ontitle = 3
+	}
+
+	window.onblur = function () {
+		//焦点不在当前窗口
+		function timeoutTxt() {
+			if (ontitle == 1) {
+				ontitle = 2
+				document.title = '数据丢失 X(';
+			}
+		}
+		//功能函数
+		ontitle = 1
+		document.title = '阿,不要离开';
+		setTimeout(timeoutTxt, 3000);
+	}
+</script>
+
+</html>
