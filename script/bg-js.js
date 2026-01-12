@@ -288,6 +288,8 @@
 		let ontitle = 0; // 页面焦点状态
 		const title = document.title;
 
+		let max_FPS = 60;
+
 		// 粒子类
 		class Particle {
 			constructor(x, y) {
@@ -377,13 +379,19 @@
 		}
 
 		// 计算FPS并动态调整粒子数
+		
 		function fps_C() {
 			const now = performance.now();
 			fps++;
 			if (now - fpsLastTime > 1000) {
 				// 自动限制粒子数
+				if (fps>55){
+					max_FPS = 60;
+				}if (fps<35) {
+					max_FPS = 30;
+				}
 				if (parts_MAX > -10 && parts_MAX < 500) {
-					parts_MAX += fps - 60;
+					parts_MAX += fps - max_FPS;
 				}
 				if (showFPS) {
 					console.log(`FPS: ${fps} parts.length: ${parts.length}  parts_MAX: ${parts_MAX}`);
