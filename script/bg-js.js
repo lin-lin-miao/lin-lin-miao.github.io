@@ -193,6 +193,10 @@
 	let fps = 0;
 	let showFPS = false;
 
+	var callbackFPS = null;
+
+
+
 	// 方式3：解构赋值（减少重复书写utils，更简洁）
 	//const { calculateSum, formatGreeting } = window.utils;
 
@@ -220,6 +224,12 @@
 			showFPS = n;
 		}
 		return;
+	};
+
+	window.bgState.setcallbackFPS = function (callback) {
+		if (typeof callback === 'function') {
+			callbackFPS = callback;
+		}
 	};
 
 	// ========== 第二步：动态创建DOM元素 ==========
@@ -378,6 +388,9 @@
 				if (showFPS) {
 					console.log(`FPS: ${fps} parts.length: ${parts.length}  parts_MAX: ${parts_MAX}`);
 				}
+				if (typeof callbackFPS === 'function') {
+					callbackFPS(fps);
+				}
 				fps = 0;
 				fpsLastTime = performance.now();
 			}
@@ -411,13 +424,13 @@
 				for (const li of lis) {
 					if (Math.random() * 2 > 1.2) {
 						const h = li.offsetHeight;
-						const y = li.offsetTop + li.clientHeight*1.1;
+						const y = li.offsetTop + li.clientHeight * 1.1;
 						const x = li.offsetLeft + (li.offsetWidth / 2);
 						const p = new Particle(x, y);
 						p.speedY = 0.2;
-						p.speedX = (Math.random() - 0.5)*0.5;
+						p.speedX = (Math.random() - 0.5) * 0.5;
 						p.speedRate = 0.1;
-						p.size_f = 0.8 + Math.random()*0.5;
+						p.size_f = 0.8 + Math.random() * 0.5;
 						p.lifetime = parseInt(150 + Math.random() * 50);
 						p.lifetime_c = p.lifetime;
 						p.op = li.offsetTop * 1.5 / wh;

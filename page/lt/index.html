@@ -10,64 +10,105 @@
 </head>
 
 <body>
-	<div class="title_menu box_bg">
+	<div class="title_menu box_bg_title">
 		<div style="height: 100%;width:100%;display: flex;align-items: center;justify-content: center;">
 			<img style="height: 100%; width: auto; object-fit: contain;"
-				src="https://i0.hdslb.com/bfs/static/jinkela/long/images/favicon.ico">
+				src="https://youke3.picui.cn/s1/2026/01/12/696501380e4a3.jpg">
 		</div>
 	</div>
 	<div class="title_menu_bottom"></div>
+
+
 	<div class="main_border ">
-		<div class="main_side_l"></div>
+		<div class="main_side_l">
+			<div class="side_l"></div>
+		</div>
+
 		<div class="main_page box_bg">
 
-			<div class="list_box box_bg">
-				<img class="list_img" src="https://i0.hdslb.com/bfs/static/jinkela/long/images/favicon.ico">
-				<div class="list_r">
-					<a class="list_text" href="../../index.html?a=aaaaa&b=aaaaa">
-						<h2>如果出现这个</h2>
-						<h4>那就证明数据获取失败啦</h4>
-					</a>
-					<div class="list_bottom">
-						<div class="list_tag">#标签1 #标签2</div>
-						<div class="list_interact">
-							<img src="../../src/ico/like.svg" class="list_ico"></img>
-							<div>0</div>
-							<img src="../../src/ico/eye.svg" class="list_ico"></img>
-							<div>0</div>
-							<img src="../../src/ico/chat.svg" class="list_ico"></img>
-							<div>0</div>
+			<div>广告广告这是广告</div>
+
+			<div id="main_list" class="main_list">
+				<div class="list_box box_bg">
+					<img class="list_img" src="https://youke3.picui.cn/s1/2026/01/12/696501380e4a3.jpg">
+					<div class="list_r">
+						<a class="list_text" href="../../index.html?pid=数据获取失败">
+							<h2>如果出现这个</h2>
+							<h4>那就证明数据获取失败啦</h4>
+						</a>
+						<div class="list_bottom">
+							<div class="list_tag">#标签1 #标签2</div>
+							<div class="list_interact">
+								<img src="../../src/ico/like.svg" class="list_ico"></img>
+								<div>0</div>
+								<img src="../../src/ico/eye.svg" class="list_ico"></img>
+								<div>0</div>
+								<img src="../../src/ico/chat.svg" class="list_ico"></img>
+								<div>0</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
+			<div></div>
+
+			<div></div>
+
 		</div>
 
-		<div class="main_side_r box_bg">
-			<P>CCCCC</P>
+		<div class="main_side_r">
+			<div class="side_r box_bg">
+				<div id="r_side_list" class="list_box_side box_bg">
+					<p>AAAAA<br>AAAAA</p>
+					<p>AAAAA<br>AAAAA</p>
+					<p>AAAAA<br>AAAAA</p>
+					<p>AAAAA<br>AAAAA</p>
+				</div>
+			</div>
 		</div>
+
 	</div>
 
 </body>
 <script src="../../script/bg-js.js"></script>
+
 <script>
-	window.bgState.setShowFPS(true)
+	//标题菜单底部留空
 	const title_menu = document.querySelector('.title_menu')
 	const title_menu_bottom = document.querySelector('.title_menu_bottom')
 
+	//侧边栏位置设定
+	const main_page_for_side_r =document.querySelector('.main_page_for_side_r');
+	const main_page_for_side_l =document.querySelector('.main_page_for_side_l');
+
+	const main_side_r =document.querySelector('.main_side_r');
+	const main_side_l =document.querySelector('.main_side_l');
+
+	const side_r = document.querySelector('.side_r');
+	const side_l = document.querySelector('.side_l');
+
 
 	function syncHeight() {
-		title_menu_bottom.style.height = (title_menu.offsetHeight + 16) + 'px';
+		let title_h = (title_menu.offsetHeight + 16) + 'px'
+		title_menu_bottom.style.height = title_h;
+		side_r.style.top = title_h;
+		side_l.style.top = title_h;
 	}
 
+	function setSide() {
+		
+	}
 
 	window.addEventListener('resize', syncHeight);
+	window.addEventListener('resize', setSide);
 	if (document.readyState === 'complete' || document.readyState === 'interactive') {
 		syncHeight()
+		setSide()
 	} else {
 		document.addEventListener('DOMContentLoaded', function () {
 			syncHeight()
+			setSide()
 		});
 	}
 </script>
@@ -89,13 +130,13 @@
 		'</div>' +
 		'</div>'
 		;
-	const main_page_view = document.querySelector('.main_page');
+	const main_page_view = document.querySelector('.main_list');
 
 	//通过api回传的数据列表解析
-	var pageData = [{'id': '1111', 'title_img': '../../src/ico/like.svg', 'title': '这是文章标题', 'title_text': '这是副标题', 'tags': ['标签1', '标签'], 'like': 5, 'click': 5, 'chat': 5},
-{'id': '1111', 'title_img': '../../src/ico/like.svg', 'title': '这是文章标题', 'title_text': '这是副标题', 'tags': ['标签1', '标签'], 'like': 5, 'click': 5, 'chat': 5}];
-	
-	showPageList(main_page_view,pageData);
+	var pageData = [{ 'id': '1111', 'title_img': '../../src/ico/like.svg', 'title': '这是文章标题', 'title_text': '这是副标题', 'tags': ['标签1', '标签'], 'like': 5, 'click': 5, 'chat': 5 },
+	{ 'id': '1111', 'title_img': '../../src/ico/like.svg', 'title': '这是文章标题', 'title_text': '这是副标题', 'tags': ['标签1', '标签'], 'like': 5, 'click': 5, 'chat': 5 },{ 'id': '1111', 'title_img': '../../src/ico/like.svg', 'title': '这是文章标题', 'title_text': '这是副标题', 'tags': ['标签1', '标签'], 'like': 5, 'click': 5, 'chat': 5 },{ 'id': '1111', 'title_img': '../../src/ico/like.svg', 'title': '这是文章标题', 'title_text': '这是副标题', 'tags': ['标签1', '标签'], 'like': 5, 'click': 5, 'chat': 5 },{ 'id': '1111', 'title_img': '../../src/ico/like.svg', 'title': '这是文章标题', 'title_text': '这是副标题', 'tags': ['标签1', '标签'], 'like': 5, 'click': 5, 'chat': 5 },{ 'id': '1111', 'title_img': '../../src/ico/like.svg', 'title': '这是文章标题', 'title_text': '这是副标题', 'tags': ['标签1', '标签'], 'like': 5, 'click': 5, 'chat': 5 }];
+
+	showPageList(main_page_view, pageData);
 
 
 	function get_list_item(data) {
@@ -116,7 +157,7 @@
 
 	function showPageList(page, data_list) {
 		main_page_view.innerHTML = "";
-		for (let item of data_list){
+		for (let item of data_list) {
 			page.appendChild(get_list_item(item))
 		}
 	}
