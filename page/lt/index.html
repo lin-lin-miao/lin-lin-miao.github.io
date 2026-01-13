@@ -10,13 +10,10 @@
 </head>
 
 <body>
-	<div class="title_menu box_bg_title">
-		<div style="height: 100%;width:100%;display: flex;align-items: center;justify-content: center;">
-			<img style="height: 100%; width: auto; object-fit: contain;"
-				src="https://youke3.picui.cn/s1/2026/01/12/696501380e4a3.jpg">
-		</div>
+	<div id="header-container">
+
+
 	</div>
-	<div class="title_menu_bottom"></div>
 
 
 	<div class="main_border ">
@@ -65,26 +62,28 @@
 					<img class="list_img" src="../../src/ico/chat.svg" referrerpolicy="no-referrer">
 					<div class="list_box box_bg">
 
-					<img class="list_img" src="https://youke3.picui.cn/s1/2026/01/12/696501380e4a3.jpg"
-						referrerpolicy="no-referrer">
-					<div class="list_r">
-						<a class="list_text" href="../../index.html?pid=数据获取失败">
-							<h2>如果出现这个</h2>
-							<h4>那就证明数据获取失败啦</h4>
-						</a>
-						<div class="list_bottom">
-							<div class="list_tag" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">#标签1 #标签2</div>
-							<div class="list_interact">
-								<img src="../../src/ico/like.svg" class="list_ico"></img>
-								<div>0</div>
-								<img src="../../src/ico/eye.svg" class="list_ico"></img>
-								<div>0</div>
-								<img src="../../src/ico/chat.svg" class="list_ico"></img>
-								<div>0</div>
+						<img class="list_img" src="https://youke3.picui.cn/s1/2026/01/12/696501380e4a3.jpg"
+							referrerpolicy="no-referrer">
+						<div class="list_r">
+							<a class="list_text" href="../../index.html?pid=数据获取失败">
+								<h2>如果出现这个</h2>
+								<h4>那就证明数据获取失败啦</h4>
+							</a>
+							<div class="list_bottom">
+								<div class="list_tag"
+									style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">#标签1 #标签2
+								</div>
+								<div class="list_interact">
+									<img src="../../src/ico/like.svg" class="list_ico"></img>
+									<div>0</div>
+									<img src="../../src/ico/eye.svg" class="list_ico"></img>
+									<div>0</div>
+									<img src="../../src/ico/chat.svg" class="list_ico"></img>
+									<div>0</div>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 				</div>
 			</div>
 		</div>
@@ -114,12 +113,47 @@
 	</div>
 
 </body>
+<script>
+	async function loadHeader() {
+		try {
+			// 读取header.html文件内容
+			const response = await fetch('header.html');
+			if (!response.ok) {
+				throw new Error(`加载失败：${response.status}`);
+			}
+			const html = await response.text();
+			// 将组件内容插入到容器中
+			document.getElementById('header-container').innerHTML = html;
+		} catch (error) {
+			// 加载失败时的降级处理（避免页面空白）
+			console.error('加载头部出错：', error);
+			document.getElementById('header-container').innerHTML = `
+        <header style="padding: 20px; background: #f5f5f5;">
+            <h1>我的网站标题</h1>
+            <nav>
+            <ul style="list-style: none; display: flex; gap: 20px; padding: 0;">
+                <li><a href="/" style="text-decoration: none; color: #333;">首页</a></li>
+                <li><a href="/about" style="text-decoration: none; color: #333;">关于我们</a></li>
+                <li><a href="/contact" style="text-decoration: none; color: #333;">联系我们</a></li>
+            </ul>
+            </nav>
+        </header>
+        `;
+		} finally {
+			document.dispatchEvent(new CustomEvent('headerLoaded'));
+		}
+	}
+
+	// 页面加载完成后执行加载
+	window.onload = loadHeader;
+</script>
 <script src="../../script/bg-js.js"></script>
 
 <script>
+
 	//标题菜单底部留空
-	const title_menu = document.querySelector('.title_menu')
-	const title_menu_bottom = document.querySelector('.title_menu_bottom')
+	let title_menu = document.querySelector('.title_menu')
+	let title_menu_bottom = document.querySelector('.title_menu_bottom')
 
 	//侧边栏位置设定
 	const main_page_for_side_r = document.querySelector('.main_page_for_side_r');
@@ -136,6 +170,7 @@
 
 
 	function syncHeight() {
+		
 		let title_h = (title_menu.offsetHeight + 16) + 'px'
 		title_menu_bottom.style.height = title_h;
 		side_r.style.top = title_h;
@@ -160,14 +195,18 @@
 	}
 
 	// setSide()
-	window.addEventListener('resize', syncHeight);
+	document.addEventListener('headerLoaded', () => {
+		title_menu = document.querySelector('.title_menu')
+		title_menu_bottom = document.querySelector('.title_menu_bottom')
+		syncHeight()
+		window.addEventListener('resize', syncHeight);
+	});
+
 	window.addEventListener('resize', setSide);
 	if (document.readyState === 'complete' || document.readyState === 'interactive') {
-		syncHeight()
 		setSide()
 	} else {
 		document.addEventListener('DOMContentLoaded', function () {
-			syncHeight()
 			setSide()
 		});
 	}
@@ -200,7 +239,7 @@
 
 
 	function get_list_item(data) {
-		var item = document.createElement('div');
+		let item = document.createElement('div');
 		let list_item_HTML = list_item_Content;
 
 		let tags = '#' + data['tags'].join(' #');

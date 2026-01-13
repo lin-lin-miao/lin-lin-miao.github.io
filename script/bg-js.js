@@ -193,7 +193,7 @@
 	let fps = 0;
 	let showFPS = false;
 
-	var callbackFPS = null;
+	let callbackFPS = null;
 
 
 
