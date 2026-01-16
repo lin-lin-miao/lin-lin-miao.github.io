@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>靈坛&gt;写下你的故事</title>
+
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="../../css/a.css">
+
+	<!-- 1. 引入 jQuery（editor.md 核心依赖） -->
+	<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
+
+	<!-- 2. 引入 editor.md 核心样式 -->
+	<link rel="stylesheet" href="/script/editor.md/css/editormd.min.css">
+
+	<!-- 可选：代码高亮主题（editor.md 内置） -->
+	<!-- <link rel="stylesheet" href="/script/editor.md/css/github.min.css"> -->
+
+
+
+</head>
+
+<body>
+	<div id="header-container" style="height: 100vh;">
+		<div class="title_menu box_bg_title"></div>
+	</div>
+
+	<div class="main_border ">
+
+		<div class="main_side_l">
+			<div class="side_l box_bg">
+				<div class="list_box box_bg" id="contents_page"></div>
+			</div>
+		</div>
+
+		<div class="main_page_edit box_bg">
+			<div class="main_page_for_side_r" style="width: 90%;"></div>
+			<div class="main_page_for_side_l" style="width: 100%;"></div>
+			<div id="md-editor-textarea">
+				<textarea id="inp-content" style="display:none;">[TOC]
+# 在这里写下你的故事喵
+## 喵喵喵
+</textarea>
+			</div>
+		</div>
+
+		<div class="main_side_r">
+			<div class="side_r"></div>
+		</div>
+	</div>
+
+
+
+
+</body>
+
+<script src="/script/editor.md/editormd.min.js"></script>
+
+<script src="./script/header_loader.js"></script>
+<script src="../../script/bg-js.js"></script>
+
+<script src="./script/header_auto.js"></script>
+
+
+<script>
+	main_side_r.style.display = 'none';
+	main_side_l.style.display = 'none';
+	document.addEventListener('headerLoaded', () => {
+		document.getElementById('to_edit_page').style.display = 'none';
+		window.scroll(0, 0)
+	});
+</script>
+
+
+<script>
+	$(function () {
+		let is_synch_scrol = true;
+		let editor = editormd("md-editor-textarea", {
+			path: "/script/editor.md/lib/",
+			width: "100%",
+			height: "95vh",
+			delay: 500,
+			htmlDecode: "style,script,iframe,sub,sup|on*",  // 过滤标签和所有on*属性
+			codeFold: true,
+			// autoHeight: true,
+
+			saveHTMLToTextarea: true,
+			watch: false,
+			toolbarAutoFixed: false,
+
+			toc: true,           // Table of contents
+			tocm: true,
+
+
+			emoji: true,
+			taskList: true,
+			tex: true,                   // 开启科学公式TeX语言支持，默认关闭
+			flowChart: true,             // 开启流程图支持，默认关闭
+			sequenceDiagram: true,       // 开启时序/序列图支持，默认关闭,
+
+			// width: "100%",
+			// height: "100%",
+			// markdown: "xxxx",     // dynamic set Markdown text
+			// path : "editor.md/lib/"  // Autoload modules mode, codemirror, marked... dependents libs path
+			onload: function () {
+				resetWatch();
+			},
+			toolbarIcons: function () {
+				return [
+					"undo", "redo", "|",
+					"bold", "del", "italic", "quote", "|",
+					"h1", "h2", "h3", "|",
+					"centerIcon", "rightIcon", "|",
+					"list-ul", "list-ol", "hr", "|",
+					"link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
+					"goto-line", "watch", "preview", "search", "|",
+					"help", "|", "synch_scrol", "l_side_c", "show_title"]
+			},
+			//如果没有图标，可以文字表述toolbarIconTexts:{ leftIcon:"left",},
+			toolbarIconsClass: {
+				centerIcon: "fa-align-center",
+				rightIcon: "fa-align-right",
+				synch_scrol: "fa-text-height",
+				l_side_c: "fa-list-alt",
+				show_title: "fa-chevron-circle-up"
+			},
+			// 自定义工具栏按钮的事件处理
+			toolbarHandlers: {
+				centerIcon: function (cm, icon, cursor, selection) {
+					cm.replaceSelection("<p align='center'>" + selection + "</p>");
+					if (selection === "") {
+						cm.setCursor(cursor.line, cursor.ch + 18);
+					}
+				},
+				rightIcon: function (cm, icon, cursor, selection) {
+					cm.replaceSelection("<p align='right'>" + selection + "</p>");
+					if (selection === "") {
+						cm.setCursor(cursor.line, cursor.ch + 17);
+					}
+				},
+				synch_scrol: function (cm, icon, cursor, selection) {
+					is_synch_scrol = !is_synch_scrol
+					editor.config("syncScrolling", is_synch_scrol);
+				},
+				l_side_c: function (params) {
+					window.head_page.is_l_side_show = !window.head_page.is_l_side_show;
+					if (window.head_page.is_l_side_show) {
+						editor.config("tocContainer", "#contents_page");
+						main_side_l.style.display = '';
+						resetWatch();
+					} else {
+						editor.config("tocContainer", "");
+						main_side_l.style.display = 'none';
+						resetWatch();
+					}
+				},
+				show_title: function (params) {
+					try {
+						window.head_page.is_show_title = !window.head_page.is_show_title
+						if (window.head_page.is_show_title) {
+							document.querySelector('.title_menu').style.display = "";
+							document.querySelector('.title_menu_bottom').style.height = window.head_page.title_h;
+						} else {
+							document.querySelector('.title_menu').style.display = "none";
+							document.querySelector('.title_menu_bottom').style.height = "0px";
+						}
+					} catch (error) {
+						console.log(error);
+					}
+
+				}
+			},
+			lang: {
+				toolbar: {
+					leftIcon: "居左",
+					centerIcon: "居中",
+					rightIcon: "居右",
+					synch_scrol: "同步滚动",
+					l_side_c: "悬挂目录",
+					show_title: "隐藏标题",
+				}
+			},
+		});
+		function resetWatch() {
+			setTimeout(() => {
+				editor.config("watch", true);
+			}, 500);
+		}
+
+	});
+</script>
+
+
+</html>

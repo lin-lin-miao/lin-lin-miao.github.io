@@ -289,6 +289,7 @@
 		const title = document.title;
 
 		let max_FPS = 60;
+		let text_umax = false
 
 		// 粒子类
 		class Particle {
@@ -310,7 +311,7 @@
 				this.test = '0'; //显示的字
 				this.op = 1; //透明度
 				this.font = "rem serif"; //文字格式
-				this.size_f = 1.5; // 文字大小
+				this.size_f = 15; // 文字大小
 
 				this.lifetime_c = this.lifetime;
 				this.isDivergence = true;
@@ -359,10 +360,17 @@
 					}
 					this.t = 0;
 				}
+				
 				ctx.save();
 				ctx.beginPath();
 				ctx.fillStyle = `rgba(255,200,255,${this.op})`;
-				ctx.font = `${this.size_f * (this.lifetime / this.lifetime_c)}vmax ${this.font}`;
+				// console.log(text_umax);
+				
+				if (text_umax){
+					ctx.font = `${this.size_f/10 * (this.lifetime / this.lifetime_c)}vmax ${this.font}`;
+				}else{
+					ctx.font = `${this.size_f * (this.lifetime / this.lifetime_c)}px ${this.font}`;
+				}
 				ctx.translate(x, y);
 				ctx.rotate(r * Math.PI / 180); // 旋转r度
 				ctx.fillText(this.test, 0, 0);
@@ -417,6 +425,11 @@
 				canvas.width = video.offsetWidth;
 				canvas.height = video.offsetHeight; // 填满屏幕
 				cFrame = canvas.getBoundingClientRect(); // 获取画板矩形
+				if(canvas.width>1000){
+					text_umax = true;
+				}else{
+					text_umax = false;
+				}
 				drawT = 0;
 			}
 			drawT += 1;
@@ -438,7 +451,7 @@
 						p.speedY = 0.2;
 						p.speedX = (Math.random() - 0.5) * 0.5;
 						p.speedRate = 0.1;
-						p.size_f = 0.8 + Math.random() * 0.5;
+						p.size_f = 10 + (Math.random() - 0.5)*1.5;
 						p.lifetime = parseInt(150 + Math.random() * 50);
 						p.lifetime_c = p.lifetime;
 						p.op = li.offsetTop * 1.5 / wh;
@@ -480,7 +493,7 @@
 					p.speedX = (Math.random() - 0.5) * 8;
 					p.speedY = (Math.random() - 0.5) * 8;
 					p.speedRate = 0.93;
-					p.size_f = 1.3 - Math.random() * 0.5;
+					p.size_f = 13 - Math.random() * 0.5;
 					p.test = Math.random() > 0.98 ? "喵" : "0";
 					p.isDivergence = false;
 					put_parts(p);
