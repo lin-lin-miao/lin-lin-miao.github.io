@@ -1,0 +1,20 @@
+.editormd-toolbar {
+	background-color: #ffffffbf;
+}
+
+.editormd-preview {
+	background-color: #ffffffbf;
+}
+
+.editormd-preview-container,
+.editormd-html-preview {
+	background-color: #ffffff00;
+}
+
+.editormd {
+	border-radius: 16px;
+}
+
+.editormd-menu>li>a {
+	border: 1px solid #ffffff00;
+}

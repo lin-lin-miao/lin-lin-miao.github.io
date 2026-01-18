@@ -15,11 +15,11 @@
 	<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
 
 	<!-- 2. 引入 editor.md 核心样式 -->
-	<link rel="stylesheet" href="/script/editor.md/css/editormd.min.css">
+	<link rel="stylesheet" href="/script/editor.md/css/editormd.css">
 
 	<!-- 可选：代码高亮主题（editor.md 内置） -->
 	<!-- <link rel="stylesheet" href="/script/editor.md/css/github.min.css"> -->
-
+	<link rel="stylesheet" href="css/edit_md.css">
 
 
 </head>
@@ -33,7 +33,7 @@
 
 		<div class="main_side_l">
 			<div class="side_l box_bg">
-				<div class="list_box box_bg" id="contents_page"></div>
+				<div class="list_box box_bg" id="contents_page" style="height: auto;"></div>
 			</div>
 		</div>
 
@@ -58,12 +58,13 @@
 
 </body>
 
-<script src="/script/editor.md/editormd.min.js"></script>
+<script src="/script/editor.md/editormd.js"></script>
 
 <script src="./script/header_loader.js"></script>
 <script src="../../script/bg-js.js"></script>
 
 <script src="./script/header_auto.js"></script>
+<script src="./script/IDBUtil.js"></script>
 
 
 <script>
@@ -84,7 +85,7 @@
 			width: "100%",
 			height: "95vh",
 			delay: 500,
-			htmlDecode: "style,script,iframe,sub,sup|on*",  // 过滤标签和所有on*属性
+			htmlDecode: "style,script,iframe,object,embed|on*|javascript,base64,data:",
 			codeFold: true,
 			// autoHeight: true,
 
@@ -102,6 +103,8 @@
 			flowChart: true,             // 开启流程图支持，默认关闭
 			sequenceDiagram: true,       // 开启时序/序列图支持，默认关闭,
 
+			editorTheme: editormd.editorThemes['theme-name'],
+
 			// width: "100%",
 			// height: "100%",
 			// markdown: "xxxx",     // dynamic set Markdown text
@@ -118,7 +121,7 @@
 					"list-ul", "list-ol", "hr", "|",
 					"link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
 					"goto-line", "watch", "preview", "search", "|",
-					"help", "|", "synch_scrol", "l_side_c", "show_title"]
+					"help", "|", "synch_scrol", "l_side_c", "show_title", "||", "save_local", "read_local"]
 			},
 			//如果没有图标，可以文字表述toolbarIconTexts:{ leftIcon:"left",},
 			toolbarIconsClass: {
@@ -126,7 +129,9 @@
 				rightIcon: "fa-align-right",
 				synch_scrol: "fa-text-height",
 				l_side_c: "fa-list-alt",
-				show_title: "fa-chevron-circle-up"
+				show_title: "fa-chevron-circle-up",
+				save_local: "fa-save",
+				read_local: "fa-download",
 			},
 			// 自定义工具栏按钮的事件处理
 			toolbarHandlers: {
@@ -171,8 +176,31 @@
 					} catch (error) {
 						console.log(error);
 					}
+				},
 
-				}
+				save_local: function (params) {
+					IDBUtil.saveObjectToIDB(
+						'page_data',
+						'UserStore',
+						'edit',
+						editor.getMarkdown()
+					).then((saveResult) => {
+						console.log("保存成功");
+					}).catch((e) => {
+						console.error(e);
+					});
+				},
+				read_local: function (params) {
+					IDBUtil.getObjectFromIDB(
+						'page_data',
+						'UserStore',
+						'edit'
+					).then((readResult) => {
+						editor.setMarkdown(readResult);
+					}).catch((e) => {
+						console.error(e);
+					});
+				},
 			},
 			lang: {
 				toolbar: {
@@ -182,6 +210,8 @@
 					synch_scrol: "同步滚动",
 					l_side_c: "悬挂目录",
 					show_title: "隐藏标题",
+					save_local: "本地保存(仅保存一份)",
+					read_local: "读取保存",
 				}
 			},
 		});
