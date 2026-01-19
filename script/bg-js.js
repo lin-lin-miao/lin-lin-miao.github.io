@@ -9,7 +9,7 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-		z-index: -1;
+		z-index: -5;
     }
 
     #bg-cvs-div {
@@ -18,7 +18,18 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-		z-index: -2;
+		z-index: -3;
+		pointer-events: none;
+    }
+
+	#m-cvs-div {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 5;
+		pointer-events: none;
     }
 
     .bg-bubbles li {
@@ -43,7 +54,7 @@
 		animation-play-state: running;
 		transition-timing-function: linear;
 		transition: all 2s ease 0.5s;
-		z-index: 1;
+		z-index: -4;
     }
 
     .bg-bubbles li:hover {
@@ -188,7 +199,8 @@
 	document.head.appendChild(style);
 
 	//定义变量
-	let parts = []; // 粒子列表
+	let bg_parts = []; // 粒子列表
+	let m_parts = []; // 粒子列表
 	let parts_MAX = 350;
 	let fps = 0;
 	let showFPS = false;
@@ -201,7 +213,7 @@
 	//const { calculateSum, formatGreeting } = window.utils;
 
 	window.bgState.getPartsLength = function () {
-		return parts.length;
+		return bg_parts.length + m_parts.length;
 	};
 
 	window.bgState.getFps = function () {
@@ -250,19 +262,30 @@
 		}
 		bgBDiv.appendChild(bgBubblesUl);
 
+
 		// 创建bg-cvs-div容器
 		const bgCvsDiv = document.createElement('div');
 		bgCvsDiv.id = 'bg-cvs-div';
 
+		const mCvsDiv = document.createElement('div');
+		mCvsDiv.id = 'm-cvs-div';
+
 		// 创建canvas元素
-		const canvas = document.createElement('canvas');
-		canvas.className = 'bg-cvs';
-		canvas.id = 'cvs';
-		bgCvsDiv.appendChild(canvas);
+		const bg_canvas = document.createElement('canvas');
+		const m_canvas = document.createElement('canvas');
+
+		bg_canvas.className = 'bg-cvs';
+		bg_canvas.id = 'bg-cvs';
+		m_canvas.className = 'm-cvs';
+		m_canvas.id = 'm-cvs';
+
+		bgCvsDiv.appendChild(bg_canvas);
+		mCvsDiv.appendChild(m_canvas);
 
 		// 将元素添加到body
 		document.body.appendChild(bgBDiv);
 		document.body.appendChild(bgCvsDiv);
+		document.body.appendChild(mCvsDiv);
 	}
 
 
@@ -271,16 +294,25 @@
 
 		let lis = []; // 浮动方形列表
 
-		const canvas = document.getElementById('cvs'); // 画板
-		const video = document.getElementById('bg-cvs-div'); // 父容器
+		const bg_canvas = document.getElementById('bg-cvs'); // 画板
+		const m_canvas = document.getElementById('m-cvs'); // 画板
+
+		const bg_video = document.getElementById('bg-cvs-div'); // 父容器
+		const m_video = document.getElementById('bg-cvs-div'); // 父容器
 		let drawT = 100;
-		const ctx = canvas.getContext('2d');
-		let cFrame;
+		const bg_ctx = bg_canvas.getContext('2d');
+		const m_ctx = m_canvas.getContext('2d');
+		let bg_cFrame;
+		let m_cFrame;
 		let fpsLastTime = 0;
 
 		let mouseLastTime = 0; // 上一次移动鼠标创建粒子的时间戳
 		let lastMx = 0; // 上一次创建粒子的鼠标X坐标
 		let lastMy = 0; // 上一次创建粒子的鼠标Y坐标
+
+		let currentMx = 0;
+		let currentMy = 0;
+
 		const MOVE_DISTANCE_THRESHOLD = 25; // 触发粒子创建的最小移动距离（像素）
 		let isMouseDown = false; // 标记鼠标是否按下
 		let longPressTimer = null; // 长按定时器，用于持续创建粒子
@@ -337,13 +369,6 @@
 				this.nextR = this.r + this.speedR; // 计算接下来粒子的旋转
 
 				this.lifetime--; // 生命周期减1
-				if (this.lifetime < 0) {
-					parts.forEach((particle, i) => {
-						if (particle === this) {
-							parts.splice(i, 1);
-						}
-					});
-				}
 			}
 
 			draw(ctx) {
@@ -360,15 +385,15 @@
 					}
 					this.t = 0;
 				}
-				
+
 				ctx.save();
 				ctx.beginPath();
 				ctx.fillStyle = `rgba(255,200,255,${this.op})`;
 				// console.log(text_umax);
-				
-				if (text_umax){
-					ctx.font = `${this.size_f/10 * (this.lifetime / this.lifetime_c)}vmax ${this.font}`;
-				}else{
+
+				if (text_umax) {
+					ctx.font = `${this.size_f / 10 * (this.lifetime / this.lifetime_c)}vmax ${this.font}`;
+				} else {
 					ctx.font = `${this.size_f * (this.lifetime / this.lifetime_c)}px ${this.font}`;
 				}
 				ctx.translate(x, y);
@@ -380,29 +405,29 @@
 		}
 
 		// 添加粒子到列表
-		function put_parts(p) {
-			if (parts.length < parts_MAX) {
-				parts.push(p);
+		function put_parts(p, list) {
+			if (bg_parts.length + m_parts.length < parts_MAX) {
+				list.push(p);
 			}
 		}
 
 		// 计算FPS并动态调整粒子数
-		
+
 		function fps_C() {
 			const now = performance.now();
 			fps++;
 			if (now - fpsLastTime > 1000) {
 				// 自动限制粒子数
-				if (fps>55){
+				if (fps > 55) {
 					max_FPS = 60;
-				}if (fps<35) {
+				} if (fps < 35) {
 					max_FPS = 30;
 				}
 				if (parts_MAX > -10 && parts_MAX < 500) {
 					parts_MAX += fps - max_FPS;
 				}
 				if (showFPS) {
-					console.log(`FPS: ${fps} parts.length: ${parts.length}  parts_MAX: ${parts_MAX}`);
+					console.log(`FPS: ${fps} parts.length: ${bg_parts.length}|${m_parts.length}  parts_MAX: ${parts_MAX}`);
 				}
 				if (typeof callbackFPS === 'function') {
 					callbackFPS(fps);
@@ -422,12 +447,18 @@
 			fps_C();
 
 			if (drawT > 60) {
-				canvas.width = video.offsetWidth;
-				canvas.height = video.offsetHeight; // 填满屏幕
-				cFrame = canvas.getBoundingClientRect(); // 获取画板矩形
-				if(canvas.width>1000){
+				bg_canvas.width = bg_video.offsetWidth;
+				bg_canvas.height = bg_video.offsetHeight; // 填满屏幕
+
+				m_canvas.width = m_video.offsetWidth;
+				m_canvas.height = m_video.offsetHeight; // 填满屏幕
+
+				bg_cFrame = bg_canvas.getBoundingClientRect(); // 获取画板矩形
+				m_cFrame = m_canvas.getBoundingClientRect(); // 获取画板矩形
+
+				if (bg_canvas.width > 1000) {
 					text_umax = true;
-				}else{
+				} else {
 					text_umax = false;
 				}
 				drawT = 0;
@@ -435,9 +466,12 @@
 			drawT += 1;
 
 			// 填充画布
-			ctx.fillStyle = 'rgba(28,17,41,1)';
-			ctx.fillRect(0, 0, cFrame.width, cFrame.height);
-			ctx.fill();
+			// bg_ctx.fillStyle = 'rgba(28,17,41,1)';
+
+			// bg_ctx.fillRect(0, 0, cFrame.width, cFrame.height);
+			bg_ctx.clearRect(0, 0, bg_canvas.width, bg_canvas.height);
+			m_ctx.clearRect(0, 0, m_canvas.width, m_canvas.height);
+			// bg_ctx.fill();
 
 			// 矩形粒子产生
 			if (drawT % 10 === 1) {
@@ -451,20 +485,35 @@
 						p.speedY = 0.2;
 						p.speedX = (Math.random() - 0.5) * 0.5;
 						p.speedRate = 0.1;
-						p.size_f = 10 + (Math.random() - 0.5)*1.5;
+						p.size_f = 10 + (Math.random() - 0.5) * 1.5;
 						p.lifetime = parseInt(150 + Math.random() * 50);
 						p.lifetime_c = p.lifetime;
 						p.op = li.offsetTop * 1.5 / wh;
-						put_parts(p);
+						put_parts(p, bg_parts);
 					}
 				}
 			}
 
-			// 绘制所有粒子
-			for (const part of parts) {
-				part.draw(ctx);
+			// ========== 绘制/更新矩形粒子（底层画布） ==========
+			for (const part of bg_parts) {
+				part.draw(bg_ctx); // 绘制到矩形粒子画布
 				part.update();
+				// 移除生命周期结束的粒子（性能优化）
+				if (part.lifetime <= 0) {
+					bg_parts.splice(bg_parts.indexOf(part), 1);
+				}
 			}
+
+			// ========== 绘制/更新其他粒子（上层画布） ==========
+			for (const part of m_parts) {
+				part.draw(m_ctx); // 绘制到其他粒子画布
+				part.update();
+				// 移除生命周期结束的粒子（性能优化）
+				if (part.lifetime <= 0) {
+					m_parts.splice(m_parts.indexOf(part), 1);
+				}
+			}
+
 		}
 
 		// 鼠标事件处理
@@ -474,13 +523,12 @@
 				if (ontitle !== 0 && ontitle !== 3) return;
 
 				isMouseDown = true;
-				const currentMx = event.clientX;
-				const currentMy = event.clientY;
-				const mx = currentMx;
-				const my = currentMy;
-				lastMx = mx;
-				lastMy = my;
-				put_parts(new Particle(mx, my));
+				currentMx = event.clientX;
+				currentMy = event.clientY;
+
+				lastMx = currentMx;
+				lastMy = currentMx;
+				put_parts(new Particle(currentMx, currentMy), m_parts);
 
 				// 启动长按定时器
 				if (longPressTimer) clearInterval(longPressTimer);
@@ -489,14 +537,15 @@
 						clearInterval(longPressTimer);
 						return;
 					}
-					p = new Particle(lastMx - 3, lastMy + 8);
+					p = new Particle(currentMx - 3, currentMy + 8);
 					p.speedX = (Math.random() - 0.5) * 8;
 					p.speedY = (Math.random() - 0.5) * 8;
 					p.speedRate = 0.93;
 					p.size_f = 13 - Math.random() * 0.5;
 					p.test = Math.random() > 0.98 ? "喵" : "0";
 					p.isDivergence = false;
-					put_parts(p);
+					p.op = 0.8
+					put_parts(p, m_parts);
 				}, 50);
 			});
 
@@ -520,13 +569,13 @@
 
 			// 鼠标移动
 			document.addEventListener('mousemove', function (event) {
+				currentMx = event.clientX;
+				currentMy = event.clientY;
 				const ti = performance.now() - mouseLastTime;
-				if (ti < 25) return;
+				if (ti < 30) return;
 				if (ontitle !== 0 && ontitle !== 3) return;
 
 				if (ti < 500) {
-					const currentMx = event.clientX;
-					const currentMy = event.clientY;
 					const moveDistance = Math.hypot(currentMx - lastMx, currentMy - lastMy);
 					if (moveDistance < MOVE_DISTANCE_THRESHOLD && (lastMx !== 0 || lastMy !== 0)) {
 						return;
@@ -534,11 +583,12 @@
 				}
 
 				mouseLastTime = performance.now();
-				const mx = event.clientX;
-				const my = event.clientY;
-				lastMx = mx;
-				lastMy = my;
-				put_parts(new Particle(mx - 7, my + 10));
+
+				lastMx = currentMx;
+				lastMy = currentMy;
+				const p = new Particle(currentMx - 7, currentMy + 10)
+				p.op = 0.8
+				put_parts(p, m_parts);
 			});
 		}
 
@@ -554,9 +604,11 @@
 			// 窗口获得焦点
 			window.addEventListener('focus', function () {
 				function timeoutTxt() {
-					document.title = title;
-					fpsLastTime = performance.now();
-					ontitle = 0;
+					if (ontitle === 3) {
+						document.title = title;
+						fpsLastTime = performance.now();
+						ontitle = 0;
+					}
 				}
 				if (ontitle === 0) return;
 				document.title = '数据恢复中';
@@ -580,8 +632,10 @@
 
 		// 主初始化函数
 		function main() {
-			cFrame = canvas.getBoundingClientRect(); // 获取画板矩形
-			ctx.fillRect(0, 0, cFrame.width, cFrame.height);
+			bg_cFrame = m_canvas.getBoundingClientRect(); // 获取画板矩形
+			m_cFrame = m_canvas.getBoundingClientRect(); // 获取画板矩形
+			bg_ctx.clearRect(0, 0, bg_canvas.width, bg_canvas.height);
+			m_ctx.clearRect(0, 0, m_canvas.width, m_canvas.height);
 			elementBinding(); // 绑定元素
 			mouseC(); // 绑定鼠标事件
 			bindFocusEvents(); // 绑定焦点事件
