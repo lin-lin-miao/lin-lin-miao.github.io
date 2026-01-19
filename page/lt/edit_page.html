@@ -31,15 +31,15 @@
 
 	<div class="main_border ">
 
-		<div class="main_side_l">
+		<div class="main_side_l" style="flex: 2;">
 			<div class="side_l box_bg">
 				<div class="list_box_side box_bg" id="contents_page" style="height: auto;"></div>
 			</div>
 		</div>
 
 		<div class="main_page_edit box_bg">
-			<div class="main_page_for_side_r" style="width: 90%;"></div>
-			<div class="main_page_for_side_l" style="width: 100%;"></div>
+			<div class="main_page_for_side_r" style="width: 90%;height: 0;"></div>
+			<div class="main_page_for_side_l" style="width: 100%;height: 0;"></div>
 			<div id="md-editor-textarea">
 				<textarea id="inp-content" style="display:none;">[TOC]
 # 在这里写下你的故事喵
@@ -49,7 +49,9 @@
 		</div>
 
 		<div class="main_side_r">
-			<div class="side_r"></div>
+			<div class="side_r">
+
+			</div>
 		</div>
 	</div>
 
@@ -68,10 +70,12 @@
 
 
 <script>
-	main_side_r.style.display = 'none';
 	main_side_l.style.display = 'none';
+	main_side_r.style.display = 'none';
 	document.addEventListener('headerLoaded', () => {
 		document.getElementById('to_edit_page').style.display = 'none';
+		window.head_page.is_l_side_show = false;
+		window.head_page.is_r_side_show = false;
 		window.scroll(0, 0)
 	});
 </script>
@@ -156,10 +160,12 @@
 					if (window.head_page.is_l_side_show) {
 						editor.config("tocContainer", "#contents_page");
 						main_side_l.style.display = '';
+						main_page_for_side_l.style.display = '';
 						resetWatch();
 					} else {
 						editor.config("tocContainer", "");
 						main_side_l.style.display = 'none';
+						main_page_for_side_l.style.display = 'none';
 						resetWatch();
 					}
 				},

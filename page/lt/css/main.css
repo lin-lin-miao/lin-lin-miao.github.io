@@ -141,7 +141,7 @@ body {
 	grid-template-columns: 100%;
 	justify-content: center;
 	justify-items: center;
-	/* align-items: center; */
+	align-items: start;
 	min-width: 200px;
 	max-width: 100%;
 	padding: 16px 2px;
@@ -156,11 +156,32 @@ body {
 	flex: 4;
 	display: grid;
 	grid-template-columns: 100%;
+	grid-template-rows: auto;
 	justify-content: center;
+	align-content: start;
 	justify-items: center;
-	/* align-items: center; */
+	align-items: start;
 	min-width: 200px;
-	min-height: 80vh;
+	min-height: 95vh;
+	width: 100%;
+	padding: 16px 16px;
+	border-radius: 16px;
+	/* 设置所有四个边角为10px的圆角 */
+	/* gap: 16px; */
+	/* transition: all 0.5s ease; */
+}
+
+.main_page_show {
+	flex: 4;
+	display: grid;
+	grid-template-columns: 100%;
+	grid-template-rows: auto;
+	justify-content: center;
+	align-content: start;
+	justify-items: center;
+	align-items: start;
+	min-width: 200px;
+	min-height: 95vh;
 	width: 100%;
 	padding: 16px 16px;
 	border-radius: 16px;

@@ -54,7 +54,7 @@
 		animation-play-state: running;
 		transition-timing-function: linear;
 		transition: all 2s ease 0.5s;
-		z-index: -4;
+		z-index: -5;
     }
 
     .bg-bubbles li:hover {

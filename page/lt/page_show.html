@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>靈坛&gt;看看你的故事</title>
+
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="../../css/a.css">
+
+
+	<link rel="stylesheet" href="/script/editor.md/css/editormd.preview.css" />
+
+	<!-- 1. 引入 jQuery（editor.md 核心依赖） -->
+	<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.5.1.min.js"></script>
+
+	<!-- 2. 引入 editor.md 核心样式 -->
+	<!-- <link rel="stylesheet" href="/script/editor.md/css/editormd.css"> -->
+
+	<!-- 可选：代码高亮主题（editor.md 内置） -->
+	<!-- <link rel="stylesheet" href="/script/editor.md/css/github.min.css"> -->
+	<link rel="stylesheet" href="css/edit_md.css">
+
+
+</head>
+
+<body>
+	<div id="header-container" style="height: 100vh;">
+		<div class="title_menu box_bg_title"></div>
+	</div>
+
+	<div class="main_border ">
+
+		<div class="main_side_l">
+			<div class="side_l box_bg">
+				<div class="list_box_side box_bg" id="contents_page" style="height: auto;"></div>
+			</div>
+		</div>
+		<div class="main_page_show box_bg">
+			<div class="main_page_for_side_r" style="width: 90%;height: 0;"></div>
+			<div class="main_page_for_side_l" style="width: 100%;height: 0;"></div>
+			<div id="md-show-textarea">
+				<textarea id="inp-content" style="display:none;">[TOC]
+# 在这里展示你的故事喵
+## 喵喵喵
+</textarea>
+			</div>
+		</div>
+		<div class="main_side_r" style="flex: 1;">
+			<div class="side_r"></div>
+		</div>
+	</div>
+</body>
+<!-- <script src="js/jquery.min.js"></script> -->
+<script src="/script/editor.md/lib/marked.min.js"></script>
+<script src="/script/editor.md/lib/prettify.min.js"></script>
+
+<script src="/script/editor.md/lib/raphael.min.js"></script>
+<script src="/script/editor.md/lib/underscore.min.js"></script>
+<script src="/script/editor.md/lib/sequence-diagram.min.js"></script>
+<script src="/script/editor.md/lib/flowchart.min.js"></script>
+<script src="/script/editor.md/lib/jquery.flowchart.min.js"></script>
+
+<script src="/script/editor.md/editormd.js"></script>
+
+<script src="./script/header_loader.js"></script>
+<script src="../../script/bg-js.js"></script>
+
+<script src="./script/header_auto.js"></script>
+<script src="./script/IDBUtil.js"></script>
+
+
+<script>
+	main_side_l.style.display = 'none';
+	// main_side_r.style.display = 'none';
+	document.addEventListener('headerLoaded', () => {
+		document.getElementById('to_edit_page').style.display = 'none';
+		window.head_page.is_l_side_show = false;
+		// window.head_page.is_r_side_show = false;
+		window.scroll(0, 0)
+	});
+</script>
+
+<script>
+	let EditormdView;
+
+	const searchParams = new URLSearchParams(window.location.search);
+	const page_id = searchParams.get('id')
+	let markdown_t = $("#inp-content").text()
+	if (page_id) {
+		if (page_id === "test") {
+			IDBUtil.getObjectFromIDB(
+				'page_data',
+				'UserStore',
+				'edit'
+			).then((readResult) => {
+				renderPreview(readResult)
+			}).catch((e) => {
+				console.error(e);
+			});
+		}
+	}
+
+	renderPreview(markdown_t)
+
+	function renderPreview(mdContent, customConfig = {}) {
+		// 默认配置
+		const defaultConfig = {
+			markdown: mdContent,//+ "\r\n" + $("#append-test").text(),
+			//htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
+			htmlDecode: "style,script,iframe",  // you can filter tags decode
+			//toc             : false,
+			tocm: true,    // Using [TOCM]
+			//tocContainer    : "#custom-toc-container", // 自定义 ToC 容器层
+			//gfm             : false,
+			//tocDropdown     : true,
+			// markdownSourceCode : true, // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
+			emoji: true,
+			taskList: true,
+			tex: true,  // 默认不解析
+			flowChart: true,  // 默认不解析
+			sequenceDiagram: true,  // 默认不解析
+		};
+		// 合并默认配置和自定义配置（模拟config的效果）
+		const finalConfig = { ...defaultConfig, ...customConfig };
+
+		// 清空旧内容（关键：避免新旧内容叠加）
+		$("#md-show-textarea").empty();
+		// 重新渲染（等效于setMarkdown + 重新配置）
+		EditormdView = editormd.markdownToHTML("md-show-textarea", finalConfig);
+	}
+</script>
+
+</html>
