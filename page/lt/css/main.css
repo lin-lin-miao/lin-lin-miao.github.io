@@ -380,3 +380,53 @@ body {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+
+/* 每个输入项的容器，用Flex实现对齐 */
+.text_input {
+	display: flex;
+	/* Flex布局让label和input在一行 */
+	align-items: center;
+	/* 垂直居中对齐 */
+	margin-bottom: 15px;
+
+
+	/* 输入项之间的间距 */
+	padding: 8px 4px;
+	border-radius: 10px;
+	transition: all 0.5s ease;
+}
+
+/* Label样式：固定宽度，右对齐，保证等宽 */
+.text_input label {
+	width: 80px;
+	/* 固定宽度，所有label统一 */
+	text-align: right;
+	/* 文字右对齐更美观 */
+	padding-right: 15px;
+	/* label和input之间的间距 */
+	font-size: 14px;
+	color: #333;
+}
+
+/* Input样式：等宽填充剩余空间，美化外观 */
+.text_input input{
+	flex: 1;
+	/* 占满剩余宽度，实现input等宽 */
+	height: 38px;
+	padding: 0 12px;
+	width: 100%;
+	border-radius: 0px;
+	font-size: 14px;
+	box-sizing: border-box;
+	border-bottom: rgba(201, 217, 255, 0.8) solid 1px !important;
+	;
+	/* 保证width:100%时不超出容器 */
+	outline: none;
+}
+
+.text_input:focus-within {
+	border-color: #409eff;
+	/* 蓝色高亮边框 */
+	box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+	/* 外层淡蓝色光晕 */
+}

@@ -318,7 +318,7 @@
 		let longPressTimer = null; // 长按定时器，用于持续创建粒子
 
 		let ontitle = 0; // 页面焦点状态
-		const title = document.title;
+		let title = document.title;
 
 		let max_FPS = 60;
 		let text_umax = false
@@ -624,6 +624,7 @@
 						document.title = '数据丢失 X(';
 					}
 				}
+				title = document.title;
 				ontitle = 1;
 				document.title = '阿,不要离开';
 				setTimeout(timeoutTxt, 3000);

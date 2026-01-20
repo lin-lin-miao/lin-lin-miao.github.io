@@ -16,14 +16,7 @@
 			console.error('加载头部出错：', error);
 			document.getElementById('header-container').innerHTML = `
         <header style="padding: 20px; background: #f5f5f5;">
-            <h1>我的网站标题</h1>
-            <nav>
-            <ul style="list-style: none; display: flex; gap: 20px; padding: 0;">
-                <li><a href="/" style="text-decoration: none; color: #333;">首页</a></li>
-                <li><a href="/about" style="text-decoration: none; color: #333;">关于我们</a></li>
-                <li><a href="/contact" style="text-decoration: none; color: #333;">联系我们</a></li>
-            </ul>
-            </nav>
+            <h1>如果你看到这个,那就是出错啦</h1>
         </header>
         `;
 		} finally {

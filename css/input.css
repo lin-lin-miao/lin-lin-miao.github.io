@@ -1,0 +1,8 @@
+input {
+	border: 0;
+	outline: 0;
+	/* border: solid 1px red; */
+	/* box-shadow: 0 0 1vmax 0.5vmax rgba(137, 137, 137, 0.15); */
+	border-radius: 4px;
+	background-color: #fff0;
+}

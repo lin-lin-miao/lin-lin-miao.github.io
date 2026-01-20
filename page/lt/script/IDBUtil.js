@@ -66,6 +66,9 @@ class IDBUtil {
 			// 数据库打开成功
 			request.onsuccess = (e) => {
 				const db = e.target.result;
+				if (!db.objectStoreNames.contains(storeName)) {
+					db.createObjectStore(storeName, { keyPath: 'id' });
+				}
 				const tx = db.transaction(storeName, 'readwrite');
 				const store = tx.objectStore(storeName);
 
