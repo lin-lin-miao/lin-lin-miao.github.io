@@ -24,6 +24,11 @@
 		}
 	}
 
-	// 页面加载完成后执行加载
-	window.onload = loadHeader;
+	if (document.readyState === 'loading') {
+		// 若 DOM 还在加载中，监听事件
+		document.addEventListener('DOMContentLoaded', loadHeader);
+	} else {
+		// 若 DOM 已加载完成（比如脚本执行较晚），直接执行
+		loadHeader();
+	}
 })();

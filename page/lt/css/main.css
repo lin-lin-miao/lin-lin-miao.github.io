@@ -207,7 +207,7 @@ body {
 	justify-items: center;
 
 	border-radius: 16px;
-	align-self: start;
+	/* align-self: start; */
 }
 
 .main_side_r {
@@ -223,7 +223,6 @@ body {
 }
 
 .side_r {
-	position: -webkit-sticky;
 	position: sticky;
 	width: 100%;
 	min-width: 100%;
@@ -248,14 +247,22 @@ body {
 }
 
 .side_l {
+	position: sticky;
 	width: 100%;
+	min-width: 100%;
+	max-height: 80vh;
 	display: grid;
 	grid-template-columns: 100%;
 	justify-content: center;
 	justify-items: center;
-	/* align-items: start; */
 	align-self: start;
+	overflow-y: auto;
+	overflow-x: hidden;
 	padding: 16px 2px;
+	top: 16px;
+
+	scrollbar-width: none;
+	-ms-overflow-style: none;
 }
 
 .list_box_side {
@@ -409,7 +416,7 @@ body {
 }
 
 /* Input样式：等宽填充剩余空间，美化外观 */
-.text_input input{
+.text_input input {
 	flex: 1;
 	/* 占满剩余宽度，实现input等宽 */
 	height: 38px;
@@ -419,7 +426,7 @@ body {
 	font-size: 14px;
 	box-sizing: border-box;
 	border-bottom: rgba(201, 217, 255, 0.8) solid 1px !important;
-	;
+	
 	/* 保证width:100%时不超出容器 */
 	outline: none;
 }
