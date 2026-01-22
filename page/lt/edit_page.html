@@ -102,20 +102,6 @@
 		window.scroll(0, 0)
 	});
 
-	sourceEl.addEventListener('scroll', function () {
-		// 1. 计算源元素的滚动比例（相对滚动高度）
-		// scrollTop：已滚动的垂直距离
-		// scrollHeight：元素内容的总高度（包括不可见部分）
-		// clientHeight：元素可视区域的高度
-		const scrollRatio = this.scrollTop / (this.scrollHeight - this.clientHeight);
-
-		// 2. 根据比例计算目标元素应滚动的距离（单向同步核心）
-		// 避免除以0（当内容高度≤可视高度时，scrollRatio为0）
-		const targetScrollTop = scrollRatio * (targetEl.scrollHeight - targetEl.clientHeight) || 0;
-
-		// 3. 设置目标元素的滚动位置（实现同步）
-		targetEl.scrollTop = targetScrollTop;
-	});
 </script>
 
 <!-- <script>
@@ -362,7 +348,6 @@
 						console.log(error);
 					}
 				},
-
 				save_local: function (params) {
 					IDBUtil.saveObjectToIDB(
 						'page_data',
@@ -438,7 +423,6 @@
 			} catch (error) {
 				console.error(error);
 			}
-
 		}
 
 	});

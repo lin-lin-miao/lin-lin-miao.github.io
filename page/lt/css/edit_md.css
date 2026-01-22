@@ -5,14 +5,12 @@
 .editormd-preview {
 	background-color: #ffffff00;
 	transition: all 0.5s ease;
-
 }
 
 .editormd-preview-container,
 .editormd-html-preview {
 	background-color: #ffffff00;
 	transition: all 0.5s ease;
-
 }
 
 .editormd {
@@ -24,6 +22,34 @@
 	border: 1px solid #ffffff00;
 }
 
+.markdown-body {
+	color: inherit;
+}
+
+.markdown-body h6 {
+	color: inherit;
+}
+
+.editormd-preview-container abbr,
+.editormd-html-preview abbr {
+	color: #000
+}
+
+.editormd-preview-container p code,
+.editormd-html-preview p code {
+	color: #000
+}
+
+.editormd-preview-container blockquote,
+.editormd-html-preview blockquote {
+	color: inherit;
+}
+
+.markdown-body table {
+	color: #000
+}
+
+/* 下面是供md调用 */
 .mdbg {
 	position: fixed;
 	top: 0px;
@@ -34,4 +60,3 @@
 	z-index: -6;
 	pointer-events: none;
 }
-

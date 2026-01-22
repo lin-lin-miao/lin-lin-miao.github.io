@@ -36,24 +36,70 @@ window.head_page.is_show_title = true;
 
 window.head_page.title_h = '0px';
 
+window.head_page.div_show = function (params) {
+	params.classList.remove('fade-out');
+	params.style.display = '';
+	params.classList.add('fade-in');
+}
+
+window.head_page.div_hidden = function (params) {
+	params.classList.remove('fade-in')
+	params.classList.add('fade-out')
+	setTimeout(() => {
+		params.style.display = 'none';
+	}, 900);
+	
+}
+
 window.head_page.show_r_side = function () {
 	window.head_page.is_r_side_show = !window.head_page.is_r_side_show;
 	if (window.head_page.is_r_side_show) {
-		main_page_for_side_r.style.display = '';
-		main_side_r.style.display = '';
+		// main_side_r.classList.remove('fade-out')
+		// main_page_for_side_r.classList.remove('fade-out')
+		// main_page_for_side_r.style.display = '';
+		// main_side_r.style.display = '';
+		// main_side_r.classList.add('fade-in')
+		// main_page_for_side_r.classList.add('fade-in')
+		window.head_page.div_show(main_side_r)
+		window.head_page.div_show(main_page_for_side_r)
 	} else {
-		main_side_r.style.display = 'none';
-		main_page_for_side_r.style.display = 'none';
+		// main_side_r.classList.remove('fade-in')
+		// main_page_for_side_r.classList.remove('fade-in')
+		// main_side_r.classList.add('fade-out')
+		// main_page_for_side_r.classList.add('fade-out')
+
+
+		// setTimeout(() => {
+		// 	main_side_r.style.display = 'none';
+		// 	main_page_for_side_r.style.display = 'none';
+		// }, 900);
+		window.head_page.div_hidden(main_side_r)
+		window.head_page.div_hidden(main_page_for_side_r)
 	}
 }
 window.head_page.show_l_side = function () {
 	window.head_page.is_l_side_show = !window.head_page.is_l_side_show;
 	if (window.head_page.is_l_side_show) {
+
+
+		main_side_l.classList.remove('fade-out')
+		main_page_for_side_l.classList.remove('fade-out')
 		main_page_for_side_l.style.display = '';
 		main_side_l.style.display = '';
+		main_side_l.classList.add('fade-in')
+		main_page_for_side_l.classList.add('fade-in')
 	} else {
-		main_side_l.style.display = 'none';
-		main_page_for_side_l.style.display = 'none';
+
+		main_side_l.classList.add('fade-out')
+		main_page_for_side_l.classList.add('fade-out')
+		main_side_l.classList.remove('fade-in')
+		main_page_for_side_l.classList.remove('fade-in')
+
+
+		setTimeout(() => {
+			main_side_l.style.display = 'none';
+			main_page_for_side_l.style.display = 'none';
+		}, 900);
 	}
 }
 
@@ -95,9 +141,21 @@ function sideScroll() {
 let lastPageScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
 // 页面滚动监听逻辑（核心）
 function handlePageScroll() {
-	if (!window_view_scroll) return
+
 	// 1. 获取当前页面滚动位置
 	const currentPageScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+	const pageScrollHEIGHT = document.documentElement.scrollHeight || document.body.scrollHeight;
+	try {
+		if (currentPageScrollTop / pageScrollHEIGHT > 0.1) {
+			document.getElementById('rside_tool').style.opacity = '1';
+		} else {
+			document.getElementById('rside_tool').style.opacity = '0';
+		}
+	} catch (error) {
+
+	}
+	if (!window_view_scroll) return
+
 	// 2. 计算本次滚动的增量（正数=向下滚，负数=向上滚）
 	const scrollDelta = currentPageScrollTop - lastPageScrollTop;
 
@@ -105,8 +163,8 @@ function handlePageScroll() {
 	if (scrollDelta !== 0) {
 		// scrollBy(x, y)：基于当前位置滚动指定增量（核心方法）
 		// x=0：横向无滚动，y=scrollDelta：纵向滚动对应增量
-		side_l.scrollBy(0, scrollDelta/5);
-		side_r.scrollBy(0, scrollDelta/5);
+		side_l.scrollBy(0, scrollDelta / 5);
+		side_r.scrollBy(0, scrollDelta / 5);
 	}
 
 	// 4. 更新上一次滚动位置，为下一次计算增量做准备

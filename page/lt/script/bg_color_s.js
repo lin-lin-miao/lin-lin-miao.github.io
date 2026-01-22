@@ -10,13 +10,63 @@ const MAX_SATURATION = 0.2
 bg_color_in.addEventListener('change', change_box_bg);
 bg_tran_in.addEventListener('change', change_box_bg);
 
-function show_color_input() {
+function show_color_input(is_move=false) {
 	is_show_more_set = !is_show_more_set
 	if (is_show_more_set) {
+		
 		more_set.style.display = "";
+		more_set.classList.remove('fade-out');
+		more_set.classList.add('fade-in');
+		const currentPageScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+		const pageScrollHEIGHT = document.documentElement.scrollHeight || document.body.scrollHeight;
+		if (is_move && currentPageScrollTop / pageScrollHEIGHT > 0.1) {
+			more_set.style.position = 'fixed';
+			more_set.style.width = "50%";
+		} else {
+			more_set.style.position = '';
+			more_set.style.width = "100%";
+		}
 	} else {
-		more_set.style.display = "none";
+		window.head_page.div_hidden(more_set);
+		// more_set.style.display = "none";
+		// more_set.classList.remove('fade-in');
+		// more_set.classList.add('fade-out');
+		// setTimeout(() => {
+		// 	more_set.style.display = "none";
+		// }, 900);
 	}
+}
+
+/**
+ * 判断元素是否完全在屏幕可视区域之外
+ * @param {HTMLElement} element - 要判断的DOM元素
+ * @returns {boolean} true=完全在屏幕外，false=在屏幕内/部分在屏幕内
+ */
+function isElementOutOfViewport(element) {
+	// 容错：如果元素不存在，返回true（视为在屏幕外）
+	if (!element || !(element instanceof HTMLElement)) {
+		console.warn('传入的不是有效的DOM元素');
+		return true;
+	}
+
+	// 获取元素相对于视口的位置信息
+	const rect = element.getBoundingClientRect();
+	// 视口的宽高
+	const viewportHeight = window.innerHeight;
+	const viewportWidth = window.innerWidth;
+
+	// 判断是否完全在视口外：
+	// 1. 完全在视口上方：元素底部 < 0
+	// 2. 完全在视口下方：元素顶部 > 视口高度
+	// 3. 完全在视口左侧：元素右侧 < 0
+	// 4. 完全在视口右侧：元素左侧 > 视口宽度
+	const isOutOfTop = rect.bottom < 0;
+	const isOutOfBottom = rect.top > viewportHeight;
+	const isOutOfLeft = rect.right < 0;
+	const isOutOfRight = rect.left > viewportWidth;
+
+	// 满足任意一个条件，即为完全在屏幕外
+	return isOutOfTop || isOutOfBottom || isOutOfLeft || isOutOfRight;
 }
 
 function change_box_bg() {

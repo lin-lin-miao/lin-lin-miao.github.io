@@ -36,7 +36,8 @@
 			/* border-color: #409eff; */
 			transition: all 0.5s ease;
 		}
-		.more_set_b{
+
+		.more_set_b:hover {
 			background-color: rgba(255, 255, 255, 1);
 		}
 	</style>
@@ -57,7 +58,7 @@
 			</div>
 		</div>
 		<div class="main_page_show box_bg" id="main_view">
-			<div style="width: 100%;display: flex; gap: 16px;">
+			<div style="width: 100%;display: flex; gap: 16px;margin-bottom: 8px;">
 				<a href="javascript:;" onclick="window.head_page.show_l_side()" title="显示目录">
 					<div class="more_set_b">
 						<i class="fa fa-angle-left"></i>
@@ -102,6 +103,30 @@
 			<div class="side_r"></div>
 		</div>
 	</div>
+
+	<div id="rside_tool" class="box_bg"
+		style="display: grid; position: fixed;bottom: 32px;right: 8px;transition: all 1s ease;opacity:0;gap: 4px;">
+		<a href="javascript:;" onclick="window.scrollTo({top: 0,behavior: 'smooth'})" title="显示目录">
+			<div class="more_set_b">
+				<i class="fa fa-rocket"></i>
+			</div>
+		</a>
+		<a href="javascript:;" onclick="window.head_page.show_l_side()" title="显示目录">
+			<div class="more_set_b">
+				<i class="fa fa-angle-left"></i>
+			</div>
+		</a>
+		<a href="javascript:;" onclick="window.head_page.show_r_side()" title="隐藏作者">
+			<div class="more_set_b">
+				<i class="fa fa-angle-right"></i>
+			</div>
+		</a>
+		<a href="javascript:;" onclick="show_color_input(true)" title="设置">
+			<div class="more_set_b">
+				<i class="fa fa-gear"></i>
+			</div>
+		</a>
+	</div>
 </body>
 <!-- <script src="js/jquery.min.js"></script> -->
 <script src="/script/editor.md/lib/marked.min.js"></script>
@@ -144,7 +169,7 @@
 	let data_page;
 
 	const searchParams = new URLSearchParams(window.location.search);
-	const page_id = searchParams.get('id')
+	const page_id = searchParams.get('pid')
 	let markdown_t = $("#inp-content").text()
 	if (page_id) {
 		if (page_id === "test") {
@@ -153,7 +178,6 @@
 				'UserStore',
 				'edit'
 			).then((readResult) => {
-
 				set_page_data(readResult)
 			}).catch((e) => {
 				console.error(e);

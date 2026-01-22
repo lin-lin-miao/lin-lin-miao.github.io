@@ -624,7 +624,9 @@
 						document.title = '数据丢失 X(';
 					}
 				}
-				title = document.title;
+				if (ontitle === 0) {
+					title = document.title;
+				}
 				ontitle = 1;
 				document.title = '阿,不要离开';
 				setTimeout(timeoutTxt, 3000);

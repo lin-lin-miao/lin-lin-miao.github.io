@@ -2,7 +2,7 @@
 a {
 	text-decoration: none;
 	/* 核心属性：取消下划线 */
-	color: #333;
+	color: inherit;
 	/* 可选：修改默认链接颜色（默认蓝色） */
 	
 	transition: all 0.2s ease;

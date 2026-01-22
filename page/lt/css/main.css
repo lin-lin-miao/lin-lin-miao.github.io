@@ -104,6 +104,50 @@ body {
 	/* color: rgb(255, 255, 255); */
 	box-shadow: 0 0 1vmax 0.5vmax rgba(137, 137, 137, 0.15);
 	border-radius: 16px;
+	/* transition-behavior: allow-discrete; */
+	transition: .25s allow-discrete;
+}
+
+.fade-in {
+	animation: fade-in 1S forwards;
+	animation-fill-mode: none;
+}
+
+@keyframes fade-in {
+	0% {
+		opacity: 0;
+		max-width: 0px;
+		max-height: 0px;
+	}
+
+	100% {
+		opacity: 1;
+		max-width: 100vw;
+		max-height: 100vh;
+	}
+}
+
+.fade-out {
+	animation: fade-out 1s forwards;
+	animation-fill-mode: none;
+}
+
+/* Keyframe animations */
+@keyframes fade-out {
+	0% {
+		opacity: 1;
+		max-width: 100vw;
+		max-height: 100vh;
+	}
+
+	90% {
+		max-width: 0px;
+	}
+
+	100% {
+		opacity: 0;
+		max-height: 0px;
+	}
 }
 
 .box_bg_title {
@@ -398,7 +442,7 @@ body {
 
 
 	/* 输入项之间的间距 */
-	padding: 8px 4px;
+	padding: 6px 8px;
 	border-radius: 10px;
 	transition: all 0.5s ease;
 }
@@ -412,7 +456,7 @@ body {
 	padding-right: 15px;
 	/* label和input之间的间距 */
 	font-size: 14px;
-	color: #333;
+	/* color: #333; */
 }
 
 /* Input样式：等宽填充剩余空间，美化外观 */
@@ -426,7 +470,7 @@ body {
 	font-size: 14px;
 	box-sizing: border-box;
 	border-bottom: rgba(201, 217, 255, 0.8) solid 1px !important;
-	
+	color: inherit;
 	/* 保证width:100%时不超出容器 */
 	outline: none;
 }
