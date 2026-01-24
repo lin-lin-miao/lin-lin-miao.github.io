@@ -24,7 +24,22 @@
 	<!-- <link rel="stylesheet" href="/script/editor.md/css/github.min.css"> -->
 	<link rel="stylesheet" href="css/edit_md.css">
 	<style>
-		
+		.more_set_b {
+			/* width: 8px; */
+			display: flex;
+			justify-content: center;
+			justify-items: center;
+			min-width: 32px;
+			border-radius: 4px;
+			background-color: rgba(255, 255, 255, 0.5);
+			/* border:  solid 2px !important; */
+			/* border-color: #409eff; */
+			transition: all 0.5s ease;
+		}
+
+		.more_set_b:hover {
+			background-color: rgba(255, 255, 255, 1);
+		}
 	</style>
 
 
@@ -83,15 +98,40 @@
 # 数据好像获取失败惹喵
 </textarea>
 			</div>
+
+			<div id="main_list" class="main_list">
+				<div class="list_box box_bg">
+					<img class="list_img" src="https://youke3.picui.cn/s1/2026/01/12/696501380e4a3.jpg"
+						referrerpolicy="no-referrer">
+					<div class="list_r">
+						<a class="list_text" href="../../index.html?pid=数据获取失败">
+							<h2>如果出现这个</h2>
+							<h4>那就证明数据获取失败啦</h4>
+						</a>
+						<div class="list_bottom">
+							<div class="list_tag">#标签1 #标签2</div>
+							<div class="list_interact">
+								<img src="../../src/ico/like.svg" class="list_ico"></img>
+								<div>0</div>
+								<img src="../../src/ico/eye.svg" class="list_ico"></img>
+								<div>0</div>
+								<img src="../../src/ico/chat.svg" class="list_ico"></img>
+								<div>0</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>
 		<div class="main_side_r" style="flex: 1;">
 			<div class="side_r box_bg">
 				<div class="list_box_side">
-					<a href="user_show.html?uid=test" style="justify-content: center;	justify-items: center;">
-						<img style="height: 128px; width: auto; object-fit: contain;"
-							src="https://eo-img.544521.xyz/i/pp/img3.webp" />
-						<div>作者</div>
-					</a>
+					<!-- <a href="user_show.html?uid=test" style="justify-content: center;	justify-items: center;"> -->
+					<img style="height: 128px; width: auto; object-fit: contain;"
+						src="https://eo-img.544521.xyz/i/pp/img3.webp" />
+					<div>作者</div>
+					<!-- </a> -->
 					<div class="list_tag">#标签1 #标签2</div>
 					<div class="list_interact">
 						<img src="../../src/ico/like.svg" class="list_ico"></img>
@@ -110,7 +150,7 @@
 
 	<div id="rside_tool" class=""
 		style="visibility: hidden;display: grid;opacity: 0; position: fixed;bottom: 32px;right: 8px;transition: all 1s ease;gap: 4px;">
-		<a href="javascript:;" onclick="window.scrollTo({top: 0,behavior: 'smooth'})" title="返回顶部">
+		<a href="javascript:;" onclick="window.scrollTo({top: 0,behavior: 'smooth'})" title="显示目录">
 			<div class="more_set_b">
 				<i class="fa fa-rocket"></i>
 			</div>
@@ -160,7 +200,7 @@
 		window.head_page.is_l_side_show = false;
 		window.head_page.is_r_side_show = true;
 		setSide();
-		window.scroll(0, 0)
+		window.scroll(0, 0);
 	});
 </script>
 
@@ -174,7 +214,7 @@
 	let data_page;
 
 	const searchParams = new URLSearchParams(window.location.search);
-	const page_id = searchParams.get('pid')
+	const page_id = searchParams.get('uid')
 	let markdown_t = $("#inp-content").text()
 	if (page_id) {
 		if (page_id === "test") {
@@ -262,6 +302,56 @@
 	}
 
 
+</script>
+
+<script>
+	const list_item_Content = '<img class="list_img" src="{{title_img}}">' +
+		'<div class="list_r">' +
+		'<a class="list_text" href="page_show.html?pid={{id}}">' +
+		'<h2>{{title}}</h2>' +
+		'<h4>{{title_text}}</h4>' +
+		'</a>' +
+		'<div class="list_bottom">' +
+		'<div class="list_tag">{{tags}}</div>' +
+		'<div class="list_interact">' +
+		'<img src="../../src/ico/like.svg" class="list_ico"></img><div>{{like}}</div>' +
+		'<img src="../../src/ico/eye.svg" class="list_ico"></img><div>{{click}}</div>' +
+		'<img src="../../src/ico/chat.svg" class="list_ico"></img><div>{{chat}}</div>' +
+		'</div>' +
+		'</div>' +
+		'</div>'
+		;
+	const main_page_view = document.querySelector('.main_list');
+
+	//通过api回传的数据列表解析
+	var pageData = [{ 'id': 'test', 'title_img': '../../src/ico/like.svg', 'title': '这是文章标题', 'title_text': '这是副标题', 'tags': ['标签1', '标签'], 'like': 5, 'click': 5, 'chat': 5 },
+	{ 'id': '1111', 'title_img': '../../src/ico/like.svg', 'title': '这是文章标题', 'title_text': '这是副标题', 'tags': ['标签1', '标签'], 'like': 5, 'click': 5, 'chat': 5 }, { 'id': '1111', 'title_img': '../../src/ico/like.svg', 'title': '这是文章标题', 'title_text': '这是副标题', 'tags': ['标签1', '标签'], 'like': 5, 'click': 5, 'chat': 5 }, { 'id': '1111', 'title_img': '../../src/ico/like.svg', 'title': '这是文章标题', 'title_text': '这是副标题', 'tags': ['标签1', '标签'], 'like': 5, 'click': 5, 'chat': 5 }, { 'id': '1111', 'title_img': '../../src/ico/like.svg', 'title': '这是文章标题', 'title_text': '这是副标题', 'tags': ['标签1', '标签'], 'like': 5, 'click': 5, 'chat': 5 }, { 'id': '1111', 'title_img': '../../src/ico/like.svg', 'title': '这是文章标题', 'title_text': '这是副标题', 'tags': ['标签1', '标签'], 'like': 5, 'click': 5, 'chat': 5 }];
+
+	showPageList(main_page_view, pageData);
+
+
+	function get_list_item(data) {
+		let item = document.createElement('div');
+		let list_item_HTML = list_item_Content;
+
+		let tags = '#' + data['tags'].join(' #');
+		data['tags'] = tags;
+
+		for (let key in data) {
+			list_item_HTML = list_item_HTML.replace(new RegExp('{{' + key + '}}', 'g'), data[key])
+		}
+
+		item.className = 'list_box box_bg';
+		item.innerHTML = list_item_HTML;
+		return item
+	}
+
+	function showPageList(view, data_list) {
+		view.innerHTML = "";
+		for (let item of data_list) {
+			view.appendChild(get_list_item(item))
+		}
+	}
 </script>
 
 </html>

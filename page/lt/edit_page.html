@@ -6,7 +6,7 @@
 
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>靈咖&gt;写下你的故事</title>
+	<title>靈咖~写下你的故事</title>
 
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<link rel="stylesheet" type="text/css" href="../../css/a.css">
@@ -41,8 +41,8 @@
 		</div>
 
 		<div class="main_page_edit box_bg" id="main_view">
-			<div class="main_page_for_side_r" style="width: 90%;height: 0;"></div>
-			<div class="main_page_for_side_l" style="width: 100%;height: 0;"></div>
+			<div class="main_page_for_side_r" style="width: 90%;"></div>
+			<div class="main_page_for_side_l" style="width: 100%;"></div>
 			<div id="md-editor-textarea">
 				<textarea id="inp-content" style="display:none;">[TOC]
 # 在这里写下你的故事喵
@@ -99,6 +99,7 @@
 		document.getElementById('to_edit_page').style.display = 'none';
 		window.head_page.is_l_side_show = false;
 		window.head_page.is_r_side_show = false;
+		setSide();
 		window.scroll(0, 0)
 	});
 
@@ -257,6 +258,7 @@
 			htmlDecode: "style,script,iframe,object,embed|on*|javascript,base64,data:",
 			codeFold: true,
 			// autoHeight: true,
+			tocContainer: "#contents_page",
 
 			saveHTMLToTextarea: true,
 			watch: false,
@@ -323,14 +325,18 @@
 				l_side_c: function (params) {
 					window.head_page.is_l_side_show = !window.head_page.is_l_side_show;
 					if (window.head_page.is_l_side_show) {
-						editor.config("tocContainer", "#contents_page");
-						main_side_l.style.display = '';
-						main_page_for_side_l.style.display = '';
+						// editor.config("tocContainer", "#contents_page");
+						// main_side_l.style.display = '';
+						// main_page_for_side_l.style.display = '';
+						window.head_page.div_show(main_side_l)
+						window.head_page.div_show(main_page_for_side_l)
 						resetWatch();
 					} else {
-						editor.config("tocContainer", "");
-						main_side_l.style.display = 'none';
-						main_page_for_side_l.style.display = 'none';
+						// editor.config("tocContainer", "");
+						// main_side_l.style.display = 'none';
+						// main_page_for_side_l.style.display = 'none';
+						window.head_page.div_hidden(main_side_l)
+						window.head_page.div_hidden(main_page_for_side_l)
 						resetWatch();
 					}
 				},

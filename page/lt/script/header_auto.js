@@ -36,10 +36,11 @@ window.head_page.is_show_title = true;
 
 window.head_page.title_h = '0px';
 
-window.head_page.div_show = function (params) {
+window.head_page.div_show = function (params, display = '') {
 	params.classList.remove('fade-out');
-	params.style.display = '';
 	params.classList.add('fade-in');
+	params.style.display = display;
+
 }
 
 window.head_page.div_hidden = function (params) {
@@ -48,7 +49,7 @@ window.head_page.div_hidden = function (params) {
 	setTimeout(() => {
 		params.style.display = 'none';
 	}, 900);
-	
+
 }
 
 window.head_page.show_r_side = function () {
@@ -60,6 +61,7 @@ window.head_page.show_r_side = function () {
 		// main_side_r.style.display = '';
 		// main_side_r.classList.add('fade-in')
 		// main_page_for_side_r.classList.add('fade-in')
+		side_r.style.top = window.head_page.title_h;
 		window.head_page.div_show(main_side_r)
 		window.head_page.div_show(main_page_for_side_r)
 	} else {
@@ -72,7 +74,12 @@ window.head_page.show_r_side = function () {
 		// setTimeout(() => {
 		// 	main_side_r.style.display = 'none';
 		// 	main_page_for_side_r.style.display = 'none';
-		// }, 900);
+		// }, 900);position: sticky;
+		// transition: all 0.5s ease;
+		side_r.style.transition = "all 0s ease";
+		side_r.style.top = document.documentElement.scrollTop || document.body.scrollTop;
+		side_r.style.transition = "inherit";
+
 		window.head_page.div_hidden(main_side_r)
 		window.head_page.div_hidden(main_page_for_side_r)
 	}
@@ -80,26 +87,16 @@ window.head_page.show_r_side = function () {
 window.head_page.show_l_side = function () {
 	window.head_page.is_l_side_show = !window.head_page.is_l_side_show;
 	if (window.head_page.is_l_side_show) {
+		side_l.style.top = window.head_page.title_h;
+		window.head_page.div_show(main_side_l)
+		window.head_page.div_show(main_page_for_side_l)
 
-
-		main_side_l.classList.remove('fade-out')
-		main_page_for_side_l.classList.remove('fade-out')
-		main_page_for_side_l.style.display = '';
-		main_side_l.style.display = '';
-		main_side_l.classList.add('fade-in')
-		main_page_for_side_l.classList.add('fade-in')
 	} else {
-
-		main_side_l.classList.add('fade-out')
-		main_page_for_side_l.classList.add('fade-out')
-		main_side_l.classList.remove('fade-in')
-		main_page_for_side_l.classList.remove('fade-in')
-
-
-		setTimeout(() => {
-			main_side_l.style.display = 'none';
-			main_page_for_side_l.style.display = 'none';
-		}, 900);
+		side_l.style.transition = "all 0s ease";
+		side_l.style.top = '0';
+		side_l.style.transition = "inherit";
+		window.head_page.div_hidden(main_side_l)
+		window.head_page.div_hidden(main_page_for_side_l)
 	}
 }
 
@@ -118,7 +115,7 @@ function throttle(fn, delay = 16) {
 
 window.addEventListener('scroll', throttle(handlePageScroll));
 
-main_view.addEventListener('scroll', throttle(sideScroll()));
+// main_view.addEventListener('scroll', throttle(sideScroll));
 
 function sideScroll() {
 	if (!main_view_scroll) return;
@@ -145,11 +142,19 @@ function handlePageScroll() {
 	// 1. 获取当前页面滚动位置
 	const currentPageScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
 	const pageScrollHEIGHT = document.documentElement.scrollHeight || document.body.scrollHeight;
+	const rside_tool = document.getElementById('rside_tool')
 	try {
 		if (currentPageScrollTop / pageScrollHEIGHT > 0.1) {
-			document.getElementById('rside_tool').style.opacity = '1';
+			rside_tool.style.visibility = 'visible';
+			rside_tool.style.opacity = '1';
 		} else {
-			document.getElementById('rside_tool').style.opacity = '0';
+			rside_tool.style.opacity = '0';
+			rside_tool.style.visibility = 'hidden';
+			// setTimeout(() => {
+			// 	if(!(currentPageScrollTop / pageScrollHEIGHT > 0.1)){
+			// 		rside_tool.style.display = 'none';
+			// 	}
+			// }, 900);
 		}
 	} catch (error) {
 
@@ -227,10 +232,10 @@ document.addEventListener('headerLoaded', () => {
 
 window.addEventListener('resize', setSide);
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
-	setSide()
+	// setSide()
 } else {
 	document.addEventListener('DOMContentLoaded', function () {
-		setSide()
+		// setSide()
 	});
 }
 // ========== 可选：处理动态添加的a标签（比如后续JS生成的） ==========

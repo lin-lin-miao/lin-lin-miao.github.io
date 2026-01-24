@@ -14,9 +14,7 @@ function show_color_input(is_move=false) {
 	is_show_more_set = !is_show_more_set
 	if (is_show_more_set) {
 		
-		more_set.style.display = "";
-		more_set.classList.remove('fade-out');
-		more_set.classList.add('fade-in');
+		window.head_page.div_show(more_set);
 		const currentPageScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
 		const pageScrollHEIGHT = document.documentElement.scrollHeight || document.body.scrollHeight;
 		if (is_move && currentPageScrollTop / pageScrollHEIGHT > 0.1) {

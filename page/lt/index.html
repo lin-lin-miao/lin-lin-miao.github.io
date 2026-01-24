@@ -4,6 +4,10 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 	<link rel="stylesheet" type="text/css" href="../../css/a.css">
+	<link rel="stylesheet" type="text/css" href="../../css/input.css">
+
+	<link rel="stylesheet" href="/script/editor.md/css/editormd.preview.css" />
+
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>靈咖</title>
@@ -21,6 +25,35 @@
 		</div>
 
 		<div class="main_page box_bg" id="main_view">
+			<div style="width: 100%;display: flex; gap: 16px;margin-bottom: 8px;">
+				<a href="javascript:;" onclick="window.head_page.show_l_side()" title="左边栏">
+					<div class="more_set_b">
+						<i class="fa fa-angle-left"></i>
+					</div>
+				</a>
+				<a href="javascript:;" onclick="window.head_page.show_r_side()" title="右边栏">
+					<div class="more_set_b">
+						<i class="fa fa-angle-right"></i>
+					</div>
+				</a>
+				<a href="javascript:;" onclick="show_color_input()" title="设置">
+					<div class="more_set_b">
+						<i class="fa fa-gear"></i>
+					</div>
+				</a>
+			</div>
+
+			<div class="more_set" style="width: 100%;display: none;">
+				<div class="text_input color_input box_bg">
+					<label>背景颜色:</label><input type="color" id="bg_color_in" name="username" value="#ffffff">
+					<label>透明度:</label><input type="number" id="bg_tran_in" name="username" value=0.8 min="0" max="1"
+						placeholder="请输入">
+					<a href="javascript:;" onclick="reset_color()">重置</a>
+					<br>
+				</div>
+				<div style="display: flex; gap: 16px;">
+				</div>
+			</div>
 
 			<div>广告广告这是广告</div>
 			<div class="main_page_for_side_r" style="width: 90%;"></div>
@@ -49,10 +82,7 @@
 					</div>
 				</div>
 			</div>
-
-
-			<div></div>
-
+			<div id="pagination" class="pagination-container"></div>
 		</div>
 
 		<div class="main_side_r">
@@ -60,9 +90,10 @@
 				<div id="r_side_list" class="list_box_side">
 					<img class="list_img" src="../../src/ico/chat.svg" referrerpolicy="no-referrer">
 					<div class="list_box box_bg">
-
-						<img class="list_img" src="https://youke3.picui.cn/s1/2026/01/12/696501380e4a3.jpg"
-							referrerpolicy="no-referrer">
+						<a class="list_text" href="../../index.html?pid=数据获取失败">
+							<img class="list_img" src="https://youke3.picui.cn/s1/2026/01/12/696501380e4a3.jpg"
+								referrerpolicy="no-referrer">
+						</a>
 						<div class="list_r">
 							<a class="list_text" href="../../index.html?pid=数据获取失败">
 								<h2>如果出现这个</h2>
@@ -87,6 +118,29 @@
 			</div>
 		</div>
 
+	</div>
+	<div id="rside_tool" class=""
+		style="visibility: hidden;display: grid;opacity: 0; position: fixed;bottom: 32px;right: 8px;transition: all 1s ease;gap: 4px;">
+		<a href="javascript:;" onclick="window.scrollTo({top: 0,behavior: 'smooth'})" title="返回顶部">
+			<div class="more_set_b">
+				<i class="fa fa-rocket"></i>
+			</div>
+		</a>
+		<a href="javascript:;" onclick="window.head_page.show_l_side()" title="左边栏">
+			<div class="more_set_b">
+				<i class="fa fa-angle-left"></i>
+			</div>
+		</a>
+		<a href="javascript:;" onclick="window.head_page.show_r_side()" title="右边栏">
+			<div class="more_set_b">
+				<i class="fa fa-angle-right"></i>
+			</div>
+		</a>
+		<a href="javascript:;" onclick="show_color_input(true)" title="设置">
+			<div class="more_set_b">
+				<i class="fa fa-gear"></i>
+			</div>
+		</a>
 	</div>
 
 	<div>
@@ -116,17 +170,22 @@
 <script src="../../script/bg-js.js"></script>
 
 <script src="script/header_auto.js"></script>
+<script src="script/bg_color_s.js"></script>
 
 <script>
 	document.addEventListener('headerLoaded', () => {
 		document.getElementById('page_back').style.display = 'none';
 		window.head_page.is_l_side_show = true;
 		window.head_page.is_r_side_show = true;
+		setSide();
+		window.scroll(0, 0);
 	});
 </script>
 
 <script>
-	const list_item_Content = '<img class="list_img" src="{{title_img}}">' +
+	const list_item_Content = '<a class="list_text" href="page_show.html?pid={{id}}">' +
+		'<img class="list_img" src="{{title_img}}">' +
+		'</a>' +
 		'<div class="list_r">' +
 		'<a class="list_text" href="page_show.html?pid={{id}}">' +
 		'<h2>{{title}}</h2>' +
@@ -167,12 +226,129 @@
 		return item
 	}
 
-	function showPageList(page, data_list) {
-		main_page_view.innerHTML = "";
+	function showPageList(view, data_list) {
+		view.innerHTML = "";
 		for (let item of data_list) {
-			page.appendChild(get_list_item(item))
+			view.appendChild(get_list_item(item))
 		}
 	}
+</script>
+
+<script>
+	// 全局变量：存储当前总页数（方便省略号点击时获取）
+	let totalPages = 0;
+	let pagination_callback =function(){};
+
+	/**
+	 * 生成倒序页码的核心函数
+	 * @param {number} number - 总页数（最大页码）
+	 * @param {number} active - 当前激活的页码
+	 */
+	function pagination(number, active) {
+		// 1. 参数校验：确保总页数和当前页合法
+		if (!Number.isInteger(number) || number < 1) {
+			console.error("总页数必须是正整数");
+			return;
+		}
+		if (!Number.isInteger(active) || active < 1 || active > number) {
+			console.error(`当前页必须是 1 到 ${number} 之间的整数`);
+			return;
+		}
+		pagination_callback(active)
+		// 保存总页数到全局变量，供省略号点击事件使用
+		// totalPages = number;
+
+		// 2. 初始化页码数组（用于拼接最终HTML）
+		let pageHtml = [];
+
+		// 3. 添加「上一页」按钮（《）
+		pageHtml.push(`<a class="page-item ${active === number ? 'disabled' : ''}" data-page="${active + 1}">《</a>`);
+
+		// 4. 核心：生成倒序的页码（适配双省略号）
+		// 规则：显示 最后一页 → 前省略号 → 当前页前后2页 → 后省略号 → 第一页
+		let showFirstEllipsis = false; // 标记是否已显示「前省略号」（靠近最大页）
+		let showSecondEllipsis = false; // 标记是否已显示「后省略号」（靠近最小页）
+
+		for (let i = number; i >= 1; i--) {
+			// 显示范围：最后一页、第一页、当前页±2范围内的页码
+			const isShow = (i === number) || (i === 1) || (Math.abs(i - active) <= 2);
+
+			if (isShow) {
+				// 生成普通页码按钮
+				pageHtml.push(`<a class="page-item ${i === active ? 'active' : ''}" data-page="${i}">${i}</a>`);
+			} else {
+				// 生成前省略号（靠近最大页：number和当前页间隔>3时显示）
+				if (!showFirstEllipsis && i > active + 2 && i < number) {
+					pageHtml.push('<a class="page-item page-ellipsis">...</a>');
+					showFirstEllipsis = true; // 标记已显示，避免重复
+				}
+				// 生成后省略号（靠近最小页：1和当前页间隔>3时显示）
+				else if (!showSecondEllipsis && i < active - 2 && i > 1) {
+					pageHtml.push('<a class="page-item page-ellipsis">...</a>');
+					showSecondEllipsis = true; // 标记已显示，避免重复
+				}
+			}
+		}
+
+		// 5. 添加「下一页」按钮（》）
+		pageHtml.push(`<a class="page-item ${active === 1 ? 'disabled' : ''}" data-page="${active - 1}">》</a>`);
+
+		// 6. 插入到容器中
+		document.getElementById('pagination').innerHTML = pageHtml.join('');
+
+		// 7. 给所有省略号绑定点击事件
+		bindEllipsisClick();
+	}
+
+	/**
+	 * 给所有省略号绑定点击事件（双省略号都生效）
+	 */
+	function bindEllipsisClick() {
+		const ellipsisElements = document.querySelectorAll('.page-ellipsis');
+		ellipsisElements.forEach(el => {
+			el.addEventListener('click', function () {
+				// 弹出输入框，提示合法页码范围
+				const inputPage = prompt(`请输入要跳转的页码（1-${totalPages}）：`, '');
+
+				// 取消输入则返回
+				if (inputPage === null) return;
+
+				// 输入验证
+				const targetPage = Number(inputPage);
+				if (isNaN(targetPage) || !Number.isInteger(targetPage) || targetPage < 1 || targetPage > totalPages) {
+					alert(`输入错误！请输入 1 到 ${totalPages} 之间的整数`);
+					return;
+				}
+
+				// 跳转目标页
+				pagination(totalPages, targetPage);
+			});
+		});
+	}
+
+	// ========== 调用示例 ==========
+	// 总页数15，当前页6（会显示两个省略号：《、15、...、8、7、6、5、4、...、1、》）
+
+	function pagination_init(number, callback) {
+		totalPages = number;
+		pagination_callback = callback
+		pagination(totalPages, totalPages);
+		// 普通页码/上下页点击事件
+		document.getElementById('pagination').addEventListener('click', function (e) {
+			const target = e.target;
+			if (target.classList.contains('page-item') &&
+				!target.classList.contains('disabled') &&
+				!target.classList.contains('page-ellipsis')) {
+				const page = target.dataset.page;
+				if (page) {
+					pagination(totalPages, Number(page));
+				}
+			}
+		});
+	}
+	pagination_init(500, function (page) {
+		console.log('点击了页码：', page);
+	})
 </script>
 
 </html>
