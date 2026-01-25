@@ -36,11 +36,27 @@ window.head_page.is_show_title = true;
 
 window.head_page.title_h = '0px';
 
+window.head_page.titlt_show = function () {
+	try {
+		window.head_page.is_show_title = !window.head_page.is_show_title;
+		if (window.head_page.is_show_title) {
+			document.querySelector('.title_menu').style.display = "";
+			// document.querySelector('.title_menu_bottom').style.height = window.head_page.title_h;
+			syncHeight()
+		} else {
+			document.querySelector('.title_menu').style.display = "none";
+			// document.querySelector('.title_menu_bottom').style.height = "0px";
+			syncHeight()
+		}
+	} catch (error) {
+		console.log(error);
+	}
+}
+
 window.head_page.div_show = function (params, display = '') {
 	params.classList.remove('fade-out');
 	params.classList.add('fade-in');
 	params.style.display = display;
-
 }
 
 window.head_page.div_hidden = function (params) {
@@ -49,7 +65,6 @@ window.head_page.div_hidden = function (params) {
 	setTimeout(() => {
 		params.style.display = 'none';
 	}, 900);
-
 }
 
 window.head_page.show_r_side = function () {
@@ -61,9 +76,11 @@ window.head_page.show_r_side = function () {
 		// main_side_r.style.display = '';
 		// main_side_r.classList.add('fade-in')
 		// main_page_for_side_r.classList.add('fade-in')
+		side_r.style.transition = "all 0s ease";
 		side_r.style.top = window.head_page.title_h;
 		window.head_page.div_show(main_side_r)
 		window.head_page.div_show(main_page_for_side_r)
+		side_r.style.transition = "inherit";
 	} else {
 		// main_side_r.classList.remove('fade-in')
 		// main_page_for_side_r.classList.remove('fade-in')
@@ -87,10 +104,12 @@ window.head_page.show_r_side = function () {
 window.head_page.show_l_side = function () {
 	window.head_page.is_l_side_show = !window.head_page.is_l_side_show;
 	if (window.head_page.is_l_side_show) {
+		side_l.style.transition = "all 0s ease";
 		side_l.style.top = window.head_page.title_h;
+		
 		window.head_page.div_show(main_side_l)
 		window.head_page.div_show(main_page_for_side_l)
-
+		side_l.style.transition = "inherit";
 	} else {
 		side_l.style.transition = "all 0s ease";
 		side_l.style.top = '0';
@@ -178,7 +197,7 @@ function handlePageScroll() {
 
 
 function syncHeight() {
-	if (!window.head_page.is_show_title) return;
+	// if (!window.head_page.is_show_title) return;
 	window.head_page.title_h = (title_menu.offsetHeight + 16) + 'px'
 	title_menu_bottom.style.height = window.head_page.title_h;
 	side_r.style.top = window.head_page.title_h;

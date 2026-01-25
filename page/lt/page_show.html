@@ -24,7 +24,7 @@
 	<!-- <link rel="stylesheet" href="/script/editor.md/css/github.min.css"> -->
 	<link rel="stylesheet" href="css/edit_md.css">
 	<style>
-		
+
 	</style>
 
 
@@ -43,35 +43,36 @@
 			</div>
 		</div>
 		<div class="main_page_show box_bg" id="main_view">
-			<div style="width: 100%;display: flex; gap: 16px;margin-bottom: 8px;">
-				<a href="javascript:;" onclick="window.head_page.show_l_side()" title="左边栏">
-					<div class="more_set_b">
-						<i class="fa fa-angle-left"></i>
-					</div>
-				</a>
-				<a href="javascript:;" onclick="window.head_page.show_r_side()" title="右边栏">
-					<div class="more_set_b">
-						<i class="fa fa-angle-right"></i>
-					</div>
-				</a>
-				<a href="javascript:;" onclick="show_color_input()" title="设置">
-					<div class="more_set_b">
-						<i class="fa fa-gear"></i>
-					</div>
-				</a>
-			</div>
-
-			<div class="more_set" style="width: 100%;display: none;">
-				<div class="text_input color_input box_bg">
-					<label>背景颜色:</label><input type="color" id="bg_color_in" name="username" value="#ffffff">
-					<label>透明度:</label><input type="number" id="bg_tran_in" name="username" value=0.8 min="0" max="1"
-						placeholder="请输入">
-					<a href="javascript:;" onclick="reset_color()">重置</a>
-					<br>
-				</div>
-				<div style="display: flex; gap: 16px;">
+			<div style="width: 100%;">
+				<div style="width: 100%;display: flex; gap: 16px;margin-bottom: 8px;">
+					<a href="javascript:;" onclick="window.head_page.show_l_side()" title="左边栏">
+						<div class="more_set_b">
+							<i class="fa fa-angle-left"></i>
+						</div>
+					</a>
+					<a href="javascript:;" onclick="window.head_page.show_r_side()" title="右边栏">
+						<div class="more_set_b">
+							<i class="fa fa-angle-right"></i>
+						</div>
+					</a>
+					<a href="javascript:;" onclick="show_color_input()" title="设置">
+						<div class="more_set_b">
+							<i class="fa fa-gear"></i>
+						</div>
+					</a>
 				</div>
 
+				<div class="more_set" style="width: 100%;display: none;">
+					<div class="text_input color_input box_bg">
+						<label>背景颜色:</label><input type="color" id="bg_color_in" name="username" value="#ffffff">
+						<label>透明度:</label><input type="number" id="bg_tran_in" name="username" value=0.8 min="0"
+							max="1" placeholder="请输入">
+						<a href="javascript:;" onclick="reset_color()">重置</a>
+						<br>
+					</div>
+					<div style="display: flex; gap: 16px;">
+					</div>
+				</div>
 			</div>
 
 			<h1 id="title_page">错误</h1>
@@ -102,14 +103,11 @@
 						<div id="chat_t">0</div>
 					</div>
 				</div>
-
-
 			</div>
 		</div>
 	</div>
 
-	<div id="rside_tool" class=""
-		style="visibility: hidden;display: grid;opacity: 0; position: fixed;bottom: 32px;right: 8px;transition: all 1s ease;gap: 4px;">
+	<div id="rside_tool" class="rside_tool">
 		<a href="javascript:;" onclick="window.scrollTo({top: 0,behavior: 'smooth'})" title="返回顶部">
 			<div class="more_set_b">
 				<i class="fa fa-rocket"></i>
@@ -203,7 +201,7 @@
 			renderPreview(markdown_t);
 			document.getElementById('title_page').innerHTML = pdata["title"];
 			document.getElementById('subtitle_page').innerHTML = pdata["subtitle"];
-			document.title = "靈咖&gt;" + pdata["title"];
+			document.title = "靈咖~" + pdata["title"];
 			// document.getElementById('tag_in').value = pdata['tag'];
 			bg_color_in.value = pdata["bg_color"];
 			bg_tran_in.value = pdata["bg_tran"];
@@ -211,7 +209,6 @@
 		} catch (error) {
 			console.error(error);
 		}
-
 	}
 
 	// // 工具函数5：判断颜色深浅（用于文字切换）

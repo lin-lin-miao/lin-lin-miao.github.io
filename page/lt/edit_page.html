@@ -68,6 +68,15 @@
 						<a href="javascript:;" onclick="reset_color()">重置</a>
 					</div>
 				</div>
+				<div style="min-height: 8px;"></div>
+				<div style="display: flex;gap: 8px;">
+					<a href="javascript:;" class="button_div" onclick="save_page_data()" title="仅保存一份">
+						<div>暂存</div>
+					</a>
+					<a href="javascript:;" class="button_div" onclick="showToast('<label>透明度:</label>')">
+						<div>提交</div>
+					</a>
+				</div>
 			</div>
 		</div>
 
@@ -90,6 +99,7 @@
 
 <script src="./script/header_auto.js"></script>
 <script src="./script/IDBUtil.js"></script>
+<script src="../../script/ToastUtil.js"></script>
 
 
 <script>
@@ -102,7 +112,6 @@
 		setSide();
 		window.scroll(0, 0)
 	});
-
 </script>
 
 <!-- <script>
@@ -247,191 +256,183 @@
 <script src="./script/bg_color_s.js"></script>
 
 <script>
-	$(function () {
-		let is_synch_scrol = true;
-		let is_show_p_bg = true;
-		let editor = editormd("md-editor-textarea", {
-			path: "/script/editor.md/lib/",
-			width: "100%",
-			height: "95vh",
-			delay: 500,
-			htmlDecode: "style,script,iframe,object,embed|on*|javascript,base64,data:",
-			codeFold: true,
-			// autoHeight: true,
-			tocContainer: "#contents_page",
 
-			saveHTMLToTextarea: true,
-			watch: false,
-			toolbarAutoFixed: false,
+	let is_synch_scrol = true;
+	let is_show_p_bg = true;
+	let editor = editormd("md-editor-textarea", {
+		path: "/script/editor.md/lib/",
+		width: "100%",
+		height: "95vh",
+		delay: 500,
+		htmlDecode: "style,script,iframe,object,embed|on*|javascript,base64,data:",
+		codeFold: true,
+		// autoHeight: true,
+		tocContainer: "#contents_page",
 
-			toc: true,           // Table of contents
-			tocm: true,
+		saveHTMLToTextarea: true,
+		watch: false,
+		toolbarAutoFixed: false,
+
+		toc: true,           // Table of contents
+		tocm: true,
 
 
-			emoji: true,
-			taskList: true,
-			tex: true,                   // 开启科学公式TeX语言支持，默认关闭
-			flowChart: true,             // 开启流程图支持，默认关闭
-			sequenceDiagram: true,       // 开启时序/序列图支持，默认关闭,
+		emoji: true,
+		taskList: true,
+		tex: true,                   // 开启科学公式TeX语言支持，默认关闭
+		flowChart: true,             // 开启流程图支持，默认关闭
+		sequenceDiagram: true,       // 开启时序/序列图支持，默认关闭,
 
-			editorTheme: editormd.editorThemes['theme-name'],
+		editorTheme: editormd.editorThemes['theme-name'],
 
-			// width: "100%",
-			// height: "100%",
-			// markdown: "xxxx",     // dynamic set Markdown text
-			// path : "editor.md/lib/"  // Autoload modules mode, codemirror, marked... dependents libs path
-			onload: function () {
-				resetWatch();
-			},
-			toolbarIcons: function () {
-				return [
-					"undo", "redo", "|",
-					"bold", "del", "italic", "quote", "|",
-					"h1", "h2", "h3", "|",
-					"centerIcon", "rightIcon", "|",
-					"list-ul", "list-ol", "hr", "|",
-					"link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
-					"goto-line", "watch", "preview", "search", "|",
-					"help", "|", "synch_scrol", "l_side_c", "show_title", "|", "save_local", "read_local"]
-			},
-			//如果没有图标，可以文字表述toolbarIconTexts:{ leftIcon:"left",},
-			toolbarIconsClass: {
-				centerIcon: "fa-align-center",
-				rightIcon: "fa-align-right",
-				synch_scrol: "fa-text-height",
-				l_side_c: "fa-list-alt",
-				show_title: "fa-chevron-circle-up",
-				save_local: "fa-save",
-				read_local: "fa-download",
-			},
-			// 自定义工具栏按钮的事件处理
-			toolbarHandlers: {
-				centerIcon: function (cm, icon, cursor, selection) {
-					cm.replaceSelection("<p align='center'>" + selection + "</p>");
-					if (selection === "") {
-						cm.setCursor(cursor.line, cursor.ch + 18);
-					}
-				},
-				rightIcon: function (cm, icon, cursor, selection) {
-					cm.replaceSelection("<p align='right'>" + selection + "</p>");
-					if (selection === "") {
-						cm.setCursor(cursor.line, cursor.ch + 17);
-					}
-				},
-				synch_scrol: function (cm, icon, cursor, selection) {
-					is_synch_scrol = !is_synch_scrol
-					editor.config("syncScrolling", is_synch_scrol);
-				},
-				l_side_c: function (params) {
-					window.head_page.is_l_side_show = !window.head_page.is_l_side_show;
-					if (window.head_page.is_l_side_show) {
-						// editor.config("tocContainer", "#contents_page");
-						// main_side_l.style.display = '';
-						// main_page_for_side_l.style.display = '';
-						window.head_page.div_show(main_side_l)
-						window.head_page.div_show(main_page_for_side_l)
-						resetWatch();
-					} else {
-						// editor.config("tocContainer", "");
-						// main_side_l.style.display = 'none';
-						// main_page_for_side_l.style.display = 'none';
-						window.head_page.div_hidden(main_side_l)
-						window.head_page.div_hidden(main_page_for_side_l)
-						resetWatch();
-					}
-				},
-				show_title: function (params) {
-					try {
-						window.head_page.is_show_title = !window.head_page.is_show_title
-						if (window.head_page.is_show_title) {
-							document.querySelector('.title_menu').style.display = "";
-							document.querySelector('.title_menu_bottom').style.height = window.head_page.title_h;
-						} else {
-							document.querySelector('.title_menu').style.display = "none";
-							document.querySelector('.title_menu_bottom').style.height = "0px";
-						}
-					} catch (error) {
-						console.log(error);
-					}
-				},
-				save_local: function (params) {
-					IDBUtil.saveObjectToIDB(
-						'page_data',
-						'UserStore',
-						'edit',
-						save_page_data()
-					).then((saveResult) => {
-						console.log("保存成功");
-					}).catch((e) => {
-						console.error(e);
-					});
-				},
-				read_local: function (params) {
-					IDBUtil.getObjectFromIDB(
-						'page_data',
-						'UserStore',
-						'edit'
-					).then((readResult) => {
-						set_page_data(readResult)
-						// editor.setMarkdown(readResult);
-					}).catch((e) => {
-						console.error(e);
-					});
-				},
-			},
-			lang: {
-				toolbar: {
-					leftIcon: "居左",
-					centerIcon: "居中",
-					rightIcon: "居右",
-					synch_scrol: "同步滚动",
-					l_side_c: "悬挂目录",
-					show_title: "隐藏标题",
-					save_local: "本地保存(仅保存一份)",
-					read_local: "读取保存",
+		// width: "100%",
+		// height: "100%",
+		// markdown: "xxxx",     // dynamic set Markdown text
+		// path : "editor.md/lib/"  // Autoload modules mode, codemirror, marked... dependents libs path
+		onload: function () {
+			resetWatch();
+		},
+		toolbarIcons: function () {
+			return [
+				"undo", "redo", "|",
+				"bold", "del", "italic", "quote", "|",
+				"h1", "h2", "h3", "|",
+				"centerIcon", "rightIcon", "|",
+				"list-ul", "list-ol", "hr", "|",
+				"link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
+				"goto-line", "watch", "preview", "search", "|",
+				"help", "|", "synch_scrol", "l_side_c", "show_title", "|", "save_local", "read_local"]
+		},
+		//如果没有图标，可以文字表述toolbarIconTexts:{ leftIcon:"left",},
+		toolbarIconsClass: {
+			centerIcon: "fa-align-center",
+			rightIcon: "fa-align-right",
+			synch_scrol: "fa-text-height",
+			l_side_c: "fa-list-alt",
+			show_title: "fa-chevron-circle-up",
+			save_local: "fa-save",
+			read_local: "fa-download",
+		},
+		// 自定义工具栏按钮的事件处理
+		toolbarHandlers: {
+			centerIcon: function (cm, icon, cursor, selection) {
+				cm.replaceSelection("<p align='center'>" + selection + "</p>");
+				if (selection === "") {
+					cm.setCursor(cursor.line, cursor.ch + 18);
 				}
 			},
-		});
-		function resetWatch() {
-			// testEditormd.setCursor({line:0, ch:0});
-			// editor.insertValue(" ");
-			// editor.focus();
-			editor.config("watch", false);
-			setTimeout(() => {
-				editor.config("watch", true);
-			}, 700);
-		}
-
-		function save_page_data() {
-
-			const pdata = {
-				markdow: editor.getMarkdown(),
-				title: document.getElementById('title_in').value,
-				subtitle: document.getElementById('subtitle_in').value,
-				tag: document.getElementById('tag_in').value,
-				bg_color: bg_color_in.value,
-				bg_tran: bg_tran_in.value,
-				date: Date.now(),
-				author: "默认",
+			rightIcon: function (cm, icon, cursor, selection) {
+				cm.replaceSelection("<p align='right'>" + selection + "</p>");
+				if (selection === "") {
+					cm.setCursor(cursor.line, cursor.ch + 17);
+				}
+			},
+			synch_scrol: function (cm, icon, cursor, selection) {
+				is_synch_scrol = !is_synch_scrol
+				editor.config("syncScrolling", is_synch_scrol);
+			},
+			l_side_c: function (params) {
+				window.head_page.is_l_side_show = !window.head_page.is_l_side_show;
+				if (window.head_page.is_l_side_show) {
+					// editor.config("tocContainer", "#contents_page");
+					// main_side_l.style.display = '';
+					// main_page_for_side_l.style.display = '';
+					window.head_page.div_show(main_side_l)
+					window.head_page.div_show(main_page_for_side_l)
+					resetWatch();
+				} else {
+					// editor.config("tocContainer", "");
+					// main_side_l.style.display = 'none';
+					// main_page_for_side_l.style.display = 'none';
+					window.head_page.div_hidden(main_side_l)
+					window.head_page.div_hidden(main_page_for_side_l)
+					resetWatch();
+				}
+			},
+			show_title: function (params) {
+				window.head_page.titlt_show()
+			},
+			save_local: function (params) {
+				save_page_data()
+			},
+			read_local: function (params) {
+				IDBUtil.getObjectFromIDB(
+					'page_data',
+					'UserStore',
+					'edit'
+				).then((readResult) => {
+					set_page_data(readResult)
+					showToast('加载成功')
+					// editor.setMarkdown(readResult);
+				}).catch((e) => {
+					console.error(e);
+				});
+			},
+		},
+		lang: {
+			toolbar: {
+				leftIcon: "居左",
+				centerIcon: "居中",
+				rightIcon: "居右",
+				synch_scrol: "同步滚动",
+				l_side_c: "悬挂目录",
+				show_title: "隐藏标题",
+				save_local: "本地保存(仅保存一份)",
+				read_local: "读取保存",
 			}
-			return pdata;
-		}
-
-		function set_page_data(pdata) {
-			try {
-				editor.setMarkdown(pdata["markdow"]);
-				document.getElementById('title_in').value = pdata["title"];
-				document.getElementById('subtitle_in').value = pdata["subtitle"];
-				document.getElementById('tag_in').value = pdata['tag'];
-				bg_color_in.value = pdata["bg_color"];
-				bg_tran_in.value = pdata["bg_tran"];
-				change_box_bg();
-			} catch (error) {
-				console.error(error);
-			}
-		}
-
+		},
 	});
+	function resetWatch() {
+		// testEditormd.setCursor({line:0, ch:0});
+		// editor.insertValue(" ");
+		// editor.focus();
+		editor.config("watch", false);
+		setTimeout(() => {
+			editor.config("watch", true);
+		}, 700);
+	}
+
+	function save_page_data() {
+
+		const pdata = {
+			markdow: editor.getMarkdown(),
+			title: document.getElementById('title_in').value,
+			subtitle: document.getElementById('subtitle_in').value,
+			tag: document.getElementById('tag_in').value,
+			bg_color: bg_color_in.value,
+			bg_tran: bg_tran_in.value,
+			date: Date.now(),
+			author: "默认",
+		}
+
+		IDBUtil.saveObjectToIDB(
+			'page_data',
+			'UserStore',
+			'edit',
+			pdata
+		).then((saveResult) => {
+			console.log("保存成功");
+			showToast('保存成功')
+		}).catch((e) => {
+			console.error(e);
+			showToast('保存失败')
+		});
+	}
+
+	function set_page_data(pdata) {
+		try {
+			editor.setMarkdown(pdata["markdow"]);
+			document.getElementById('title_in').value = pdata["title"];
+			document.getElementById('subtitle_in').value = pdata["subtitle"];
+			document.getElementById('tag_in').value = pdata['tag'];
+			bg_color_in.value = pdata["bg_color"];
+			bg_tran_in.value = pdata["bg_tran"];
+			change_box_bg();
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
 </script>
 
 

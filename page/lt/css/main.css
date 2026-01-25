@@ -15,7 +15,8 @@ body {
 }
 
 ul {
-	padding: 0 10px;
+	padding: 0 12px;
+	box-sizing: border-box;
 }
 
 /* .body{
@@ -137,7 +138,7 @@ ul {
 }
 
 .fade-in {
-	animation: fade-in 1S forwards;
+	animation: fade-in 0.5S forwards;
 	animation-fill-mode: none;
 }
 
@@ -581,12 +582,35 @@ ul {
 	background-color: #eee;
 }
 
-/* 省略号专属样式（区分普通页码） */
-/* .page-ellipsis {
-	cursor: pointer;
-	color: #007bff;
+.rside_tool {
+	visibility: hidden;
+	display: grid;
+	opacity: 0;
+	position: fixed;
+	bottom: 32px;
+	right: 8px;
+	transition: all 1s ease;
+	gap: 4px;
 }
 
-.page-ellipsis:hover {
-	background-color: #e8f4ff;
-} */
+.button_div {
+	border-radius: 1.2vmax;
+	/* 设置所有四个边角为10px的圆角 */
+	padding: 2px 2px 2px 2px;
+	width: 64px;
+	min-width: 32px;
+	min-height: 32px;
+	border: rgba(201, 217, 255, 0.8) solid 0.25vmax !important;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	box-sizing: border-box;
+	overflow-x: hidden;
+	transition: all 0.5s ease;
+}
+
+.button_div:hover {
+	background: #ffffff40;
+}
+

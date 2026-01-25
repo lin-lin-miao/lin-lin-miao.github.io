@@ -227,7 +227,18 @@
 			}).catch((e) => {
 				console.error(e);
 			});
-		} else {
+		}else if (page_id === "self"){
+			IDBUtil.getObjectFromIDB(
+				'page_data',
+				'UserStore',
+				'edit'
+			).then((readResult) => {
+				set_page_data(readResult)
+			}).catch((e) => {
+				console.error(e);
+			});
+		}
+		else {
 			markdown_t = page_id;
 		}
 
